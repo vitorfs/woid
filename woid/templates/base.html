@@ -1,12 +1,40 @@
-<!doctype html>
-<html>
+{% load staticfiles %}<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Woid</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Bloodhound{% endblock %}</title>
+  <link href="{% static 'css/vendor/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/woid.css' %}" rel="stylesheet">
+  {% block stylesheet %}{% endblock %}
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 </head>
 <body>
   {% include 'includes/header.html' %}
-  {% block content %}{% endblock %}
+  <main>
+    <div class="container-fluid">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-dismissible {% if message.tags %}{% if message.tags == 'error' %}alert-danger{% elif message.tags == 'debug' %}alert-warning{% else %}alert-{{ message.tags }}{% endif %}{% else %}alert-info{% endif %}" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
   {% include 'includes/footer.html' %}
+  <script src="{% static 'js/vendor/jquery-1.11.3.min.js' %}"></script>
+  <script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/vendor/mustache.min.js' %}"></script>
+  <script src="{% static 'js/woid.js' %}"></script>
+  {% block javascript %}{% endblock %}
 </body>
 </html>
