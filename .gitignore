@@ -55,3 +55,8 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Woid
+.DS_Store
+.env
+*.sqlite3
