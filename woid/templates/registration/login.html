@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/registration.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    $(function () {
+      $('#id_username').focus();
+    });
+  </script>
+{% endblock %}
+
+{% block menu %}{% endblock %}
+
+{% block content %}
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <div>
+      <button type="submit">Login</button>
+      <a href="#">Forgot your password?</a>
+    </div>
+  </form>
+{% endblock %}

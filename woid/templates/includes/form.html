@@ -1,0 +1,29 @@
+{% if form.non_field_errors %}
+  {% for error in form.non_field_errors %}
+    <div class="alert alert-error">
+      <a href="javascript:void(0);" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+      {{ error }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% for hidden in form.hidden_fields %}
+  {{ hidden }}
+{% endfor %}
+
+{% for field in form.visible_fields %}
+  <div>
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
+    {% if field.help_text %}
+      <span>{{ field.help_text }}</span>
+    {% endif %}
+    {% if field.errors %}
+      <ul>
+        {% for error in field.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endfor %}

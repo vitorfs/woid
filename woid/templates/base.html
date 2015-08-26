@@ -1,40 +1,50 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% load staticfiles compress %}<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Bloodhound{% endblock %}</title>
-  <link href="{% static 'css/vendor/bootstrap.min.css' %}" rel="stylesheet">
+  <title>{% block title %}Woid{% endblock %}</title>
+  {% compress css %}
+  <link href="{% static 'css/vendor/normalize.css' %}" rel="stylesheet">
   <link href="{% static 'css/woid.css' %}" rel="stylesheet">
   {% block stylesheet %}{% endblock %}
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+  {% endcompress %}
 </head>
 <body>
-  {% include 'includes/header.html' %}
+  <header>
+    <a href="{% url 'home' %}">woid</a>
+    {% if user.is_authenticated %}
+      <nav><a href="{% url 'signup' %}">{{ user.username }}</a> / <a href="{% url 'logout' %}">logout</a></nav>
+    {% else %}
+      <nav><a href="{% url 'signup' %}">sign up</a> / <a href="{% url 'login' %}">login</a></nav>
+    {% endif %}
+  </header>
   <main>
-    <div class="container-fluid">
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-dismissible {% if message.tags %}{% if message.tags == 'error' %}alert-danger{% elif message.tags == 'debug' %}alert-warning{% else %}alert-{{ message.tags }}{% endif %}{% else %}alert-info{% endif %}" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-      {% block content %}{% endblock %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+      <a href="javascript:void(0);" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+      {{ message }}
     </div>
+  {% endfor %}
+  {% block menu %}
+    <ul>
+      <li>all</li>
+      <li><a href="#">hn</a></li>
+      <li><a href="#">reddit</a></li>
+      <li><a href="#">medium</a></li>
+      <li><a href="#">digg</a></li>
+      <li><a href="#">youporn</a></li>
+    </ul>
+  {% endblock %}
+  {% block content %}{% endblock %}
   </main>
-  {% include 'includes/footer.html' %}
+  <footer></footer>
+  {% compress js %}
   <script src="{% static 'js/vendor/jquery-1.11.3.min.js' %}"></script>
-  <script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/vendor/mustache.min.js' %}"></script>
   <script src="{% static 'js/woid.js' %}"></script>
   {% block javascript %}{% endblock %}
+  {% endcompress %}
 </body>
 </html>

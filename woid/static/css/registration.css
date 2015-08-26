@@ -1,0 +1,50 @@
+form > div {
+  margin-bottom: 15px;
+}
+
+form > div label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+
+form > div span {
+  color: #aaa;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+form > div ul {
+  margin: 0;
+  padding: 0;
+}
+
+form > div ul li {
+  list-style: none;
+  color: #a94442;
+  padding-top: 5px;
+}
+
+@media (max-width: 768px) {
+  form > div input {
+    display: block;
+    width: 100%;
+  }
+
+  form > div span {
+    display: block;
+    margin: 0;
+    padding: 5px 0;
+  }
+}
+
+form > div:last-child button + span {
+  margin-left: 10px;
+  vertical-align: middle;
+  color: #333;
+}
+
+form > div:last-child button + a {
+  margin-left: 10px;
+  vertical-align: middle;
+}

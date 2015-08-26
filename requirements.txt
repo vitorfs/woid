@@ -4,3 +4,4 @@ psycopg2==2.6.1
 python-decouple==2.3
 pytz==2015.4
 Unipath==1.1
+django-compressor==1.5

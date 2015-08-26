@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 from decouple import config, Csv
 from unipath import Path
-
 import os
+
+from django.contrib.messages import constants as message_constants
+
 
 PROJECT_DIR = Path(__file__).parent
 
@@ -22,8 +24,13 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+#COMPRESS_ENABLED = True
+COMPRESS_OUTPUT_DIR = ''
+
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
+
+MESSAGE_LEVEL = config('MESSAGE_LEVEL', default=message_constants.INFO, cast=int)
 
 
 INSTALLED_APPS = (
@@ -33,6 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'compressor',
 
     'woid.apps.core',
 )
@@ -91,9 +100,20 @@ USE_TZ = True
 
 STATIC_ROOT = PROJECT_DIR.parent.parent.child('static')
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = (
     PROJECT_DIR.child('static'),
 )
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
 MEDIA_ROOT = PROJECT_DIR.parent.parent.child('media')
 MEDIA_URL = '/media/'
+
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+LOGIN_REDIRECT_URL = '/'
