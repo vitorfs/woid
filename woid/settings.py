@@ -43,7 +43,9 @@ INSTALLED_APPS = (
 
     'compressor',
 
+    'woid.apps.accounts',
     'woid.apps.core',
+    'woid.apps.services',
 )
 
 MIDDLEWARE_CLASSES = (
