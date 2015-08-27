@@ -76,8 +76,14 @@ main > ul li + li:before {
   content: "/\00a0";
 }
 
-h1, h2, h3 {
+h1, 
+h2, 
+h3 {
   font-weight: 500;
+}
+
+main > ol {
+  padding-left: 17px;
 }
 
 button {

@@ -1,0 +1,10 @@
+[
+  {
+    "model": "services.Service",
+    "pk": 1,
+    "fields": {
+      "name": "Hacker News",
+      "slug": "hn"
+    }
+  }
+]
