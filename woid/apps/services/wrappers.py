@@ -10,3 +10,7 @@ class HackerNews(object):
     def get_top_stories(self):
         results = self.firebase_app.get('/v0/topstories', None)
         return results
+
+    def get_story(self, code):
+        result = self.firebase_app.get('/v0/item/{0}'.format(code), None)
+        return result
