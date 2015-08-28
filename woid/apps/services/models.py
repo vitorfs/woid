@@ -38,3 +38,15 @@ class Story(models.Model):
 
     def __unicode__(self):
         return self.code
+
+class StoryUpdate(models.Model):
+    story = models.ForeignKey(Story, related_name='updates')
+    updated_at = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=500, null=True, blank=True)
+    comments = models.IntegerField(default=0)
+    score = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        verbose_name = 'story update'
+        verbose_name_plural = 'stories updates'
+        return self.story.code
