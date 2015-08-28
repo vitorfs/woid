@@ -3,8 +3,16 @@
     "model": "services.Service",
     "pk": 1,
     "fields": {
-      "name": "Hacker News",
+      "name": "hacker news",
       "slug": "hn"
+    }
+  },
+  {
+    "model": "services.Service",
+    "pk": 2,
+    "fields": {
+      "name": "reddit",
+      "slug": "reddit"
     }
   }
 ]
