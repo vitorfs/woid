@@ -18,14 +18,11 @@ class Service(models.Model):
     def __unicode__(self):
         return self.name
 
-    def get_today_stories(self):
-        return self.stories.get_today_stories()
-
 class Story(models.Model):
     service = models.ForeignKey(Service, related_name='stories')
     code = models.CharField(max_length=255)
-    title = models.CharField(max_length=255, null=True, blank=True)
-    url = models.URLField(null=True, blank=True)
+    title = models.CharField(max_length=500, null=True, blank=True)
+    url = models.URLField(max_length=2000, null=True, blank=True)
     comments = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
     date = models.DateField(auto_now_add=True)

@@ -8,5 +8,4 @@ class ServiceManager(models.Manager):
     pass
 
 class StoryManager(models.Manager):
-    def get_today_stories(self):
-        return self.get_queryset().filter(date=timezone.now())
+    pass

@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 from decouple import config, Csv
 from unipath import Path
-import os
+import dj_database_url
 
 from django.contrib.messages import constants as message_constants
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 
 PROJECT_DIR = Path(__file__).parent
@@ -81,10 +82,8 @@ WSGI_APPLICATION = 'woid.wsgi.application'
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': PROJECT_DIR.parent.child('db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+      default = config('DATABASE_URL'))
 }
 
 
@@ -119,3 +118,5 @@ MEDIA_URL = '/media/'
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/'
+
+TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)

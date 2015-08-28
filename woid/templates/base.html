@@ -28,13 +28,8 @@
     </div>
   {% endfor %}
   {% block menu %}
-    <ul>
-      <li>all</li>
-      <li><a href="#">hn</a></li>
-      <li><a href="#">reddit</a></li>
-      <li><a href="#">medium</a></li>
-      <li><a href="#">digg</a></li>
-    </ul>
+    <h1>top stories</h1>
+    {% include 'includes/menu.html' %}
   {% endblock %}
   {% block content %}{% endblock %}
   </main>

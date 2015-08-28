@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'js/services/stories.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  {% include 'services/includes/menu.html' %}
+  <ol>
+    {% for story in stories %}
+      <li>
+        <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
+        <small>{{ story.score }} points &bullet; {{ story.comments }} comments &bullet; {{ story.date }}</small>
+      </li>
+    {% endfor %}
+  </ol>
+{% endblock %}

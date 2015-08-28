@@ -17,6 +17,8 @@ from woid.crawler.crawler import HackerNewsCrawler
 from woid.apps.services.models import Service, Story
 
 
+FIVE_MINUTES = 5 * 60
+
 class HNSUpdateTopStories(threading.Thread):
     crawler = HackerNewsCrawler()
 
@@ -24,7 +26,7 @@ class HNSUpdateTopStories(threading.Thread):
         while True:
             print 'Searching for new Hacker News top stories...'
             self.crawler.update_top_stories()
-            time.sleep(5*60)
+            time.sleep(FIVE_MINUTES)
 
 class HNSUpdateStoriesData(threading.Thread):
     crawler = HackerNewsCrawler()
@@ -32,13 +34,13 @@ class HNSUpdateStoriesData(threading.Thread):
     def run(self):
         while True:
             print 'Updating Hacker News top stories...'
-            for story in Story.objects.all():
+            for story in self.service.get_today_stories():
                 self.crawler.update_story(story)
 
 def main():
     HNSUpdateTopStories().start()
     HNSUpdateStoriesData().start()
-    
+
 
 if __name__ == '__main__':
     main()
