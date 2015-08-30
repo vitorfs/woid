@@ -18,6 +18,10 @@ class HackerNewsClient(object):
         result = self.firebase_app.get('/v0/item/{0}'.format(code), None)
         return result
 
+    def get_max_item(self):
+        result = self.firebase_app.get('/v0/maxitem', None)
+        return result
+
 class RedditClient(object):
     def __init__(self):
         self.headers = { 'user-agent': 'woid/1.0' }

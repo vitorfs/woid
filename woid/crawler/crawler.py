@@ -23,6 +23,10 @@ class HackerNewsCrawler(object):
         if story_data:
             story, created = Story.objects.get_or_create(service=self.service, code=code)
 
+            if story_data.get('deleterd', False):
+                story.delete()
+                return
+
             if story.status == Story.NEW:
                 story.date = datetime.fromtimestamp(story_data.get('time'), timezone.get_current_timezone())
                 story.url = u'{0}{1}'.format(story.service.story_url, story.code)
