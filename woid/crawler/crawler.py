@@ -23,7 +23,7 @@ class HackerNewsCrawler(object):
         if story_data:
             story, created = Story.objects.get_or_create(service=self.service, code=code)
 
-            if story_data.get('deleterd', False):
+            if story_data.get('deleted', False):
                 story.delete()
                 return
 
