@@ -18,7 +18,7 @@ def archive(request, slug):
 
 def year(request, slug, year):
     service = get_object_or_404(Service, slug=slug)
-    stories = service.stories.filter(date__year=year)
+    stories = service.stories.filter(status=Story.OK, date__year=year)
     return render(request, 'services/stories.html', {
         'service': service,
         'stories': stories
@@ -26,7 +26,7 @@ def year(request, slug, year):
 
 def month(request, slug, year, month):
     service = get_object_or_404(Service, slug=slug)
-    stories = service.stories.filter(date__year=year, date__month=month)
+    stories = service.stories.filter(status=Story.OK, date__year=year, date__month=month)
     return render(request, 'services/stories.html', {
         'service': service,
         'stories': stories
@@ -34,7 +34,7 @@ def month(request, slug, year, month):
 
 def day(request, slug, year, month, day):
     service = get_object_or_404(Service, slug=slug)
-    stories = service.stories.filter(date__year=year, date__month=month, date__day=day)
+    stories = service.stories.filter(status=Story.OK, date__year=year, date__month=month, date__day=day)
     return render(request, 'services/stories.html', {
         'service': service,
         'stories': stories

@@ -2,6 +2,6 @@
 
 <ul class="menu-services">
   <li><a href="{% url 'home' %}"{% if request.path = '/' %} class="active"{% endif %}>all</a></li>
-  <li><a href="{% url 'services:index' 'hn' %}"{% if request.path|startswith:'/hn/' %} class="active"{% endif %}>hn</a></li>
+  <li><a href="{% url 'services:index' 'hn' %}"{% if request.path|startswith:'/hn/' %} class="active"{% endif %}>hacker news</a></li>
   <li><a href="{% url 'services:index' 'hn' %}"{% if request.path|startswith:'/github/' %} class="active"{% endif %}>github</a></li>
 </ul>

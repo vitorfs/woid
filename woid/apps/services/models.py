@@ -24,9 +24,11 @@ class Service(models.Model):
 class Story(models.Model):
     TEXT = 'T'
     URL = 'U'
+    IMAGE = 'I'
     CONTENT_TYPES = (
         (TEXT, 'Text'),
         (URL, 'URL'),
+        (IMAGE, 'Image'),
     )
 
     NEW = 'N'
@@ -43,10 +45,10 @@ class Story(models.Model):
     title = models.CharField(max_length=500, null=True, blank=True)
     url = models.URLField(max_length=2000, null=True, blank=True)
     content = models.CharField(max_length=4000, null=True, blank=True)
-    content_type = models.CharField(max_length=1, default=TEXT, choices=CONTENT_TYPES)
+    content_type = models.CharField(max_length=1, choices=CONTENT_TYPES, null=True, blank=True)
     comments = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, default=NEW, choices=STATUS)
 
     objects = StoryManager()
