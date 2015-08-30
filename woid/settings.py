@@ -25,7 +25,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-#COMPRESS_ENABLED = True
+COMPRESS_ENABLED = True
 COMPRESS_OUTPUT_DIR = ''
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
