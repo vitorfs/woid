@@ -3,6 +3,8 @@
 import requests
 from firebase import firebase
 
+requests.packages.urllib3.disable_warnings()
+
 
 class HackerNewsClient(object):
     def __init__(self):
