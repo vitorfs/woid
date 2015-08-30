@@ -4,7 +4,7 @@ import requests
 from firebase import firebase
 
 
-class HackerNews(object):
+class HackerNewsClient(object):
     def __init__(self):
         self.firebase_app = firebase.FirebaseApplication('https://hacker-news.firebaseio.com', None)
 
@@ -16,7 +16,7 @@ class HackerNews(object):
         result = self.firebase_app.get('/v0/item/{0}'.format(code), None)
         return result
 
-class Reddit(object):
+class RedditClient(object):
     def __init__(self):
         self.headers = { 'user-agent': 'woid/1.0' }
 

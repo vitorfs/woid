@@ -22,53 +22,59 @@ from woid.apps.services.models import Service, Story
 
 FIVE_MINUTES = 5 * 60
 TWELVE_HOURS = 12 * 60 * 60
+HACKER_NEWS_SLUG = 'hn'
 
 
-class HNSUpdateTopStories(threading.Thread):
-    crawler = HackerNewsCrawler()
+class HackerNewsService(threading.Thread):
+    def __init__(self):
+        super(HackerNewsService, self).__init__()
+        self.crawler = HackerNewsCrawler()
+        self.service = Service.objects.get(slug=HACKER_NEWS_SLUG)
+
+
+class HNSUpdateTopStories(HackerNewsService):
     def run(self):
-        print('HNSUpdateTopStories: Starting')
+        logging.debug('HNSUpdateTopStories: Starting')
         run_count = 0
         while True:
             run_count = run_count + 1
-            print('HNSUpdateTopStories: Run #{0}'.format(run_count))
-            print('HNSUpdateTopStories: Updating top stories')
+            logging.debug('HNSUpdateTopStories: Run #{0}'.format(run_count))
+            logging.debug('HNSUpdateTopStories: Updating top stories')
             self.crawler.update_top_stories()
-            print('HNSUpdateTopStories: Sleeping for 5 minutes')
+            logging.debug('HNSUpdateTopStories: Sleeping for 5 minutes')
             time.sleep(FIVE_MINUTES)
 
 
-class HNSUpdateTodayStoriesData(threading.Thread):
-    crawler = HackerNewsCrawler()
-    service = Service.objects.get(slug='hn')
+class HNSUpdateTodayStoriesData(HackerNewsService):
     def run(self):
-        print('HNSUpdateTodayStoriesData: Starting')
+        logging.debug('HNSUpdateTodayStoriesData: Starting')
         run_count = 0
         while True:
             run_count = run_count + 1
-            print('HNSUpdateTodayStoriesData: Run #{0}'.format(run_count))
+            logging.debug('HNSUpdateTodayStoriesData: Run #{0}'.format(run_count))
             today = timezone.now()
-            print('HNSUpdateTodayStoriesData: Reference day {0}'.format(today))
-            today_stories = self.service.stories.filter(date__year=today.year, date__month=today.month, date__day=today.day)
-            for story in today_stories:
-                print('HNSUpdateTodayStoriesData: Crawling HN story with id {0}'.format(story.pk))
-                self.crawler.update_story(story)
-            print('HNSUpdateTodayStoriesData: Sleeping for 5 minutes')
+            logging.debug('HNSUpdateTodayStoriesData: Reference day {0}'.format(today))
+            today_stories = self.service.stories \
+                    .filter(date__year=today.year, date__month=today.month, date__day=today.day) \
+                    .values_list('code', flat=True)
+            for story_code in today_stories:
+                logging.debug('HNSUpdateTodayStoriesData: Crawling HN story with id {0}'.format(story_code))
+                self.crawler.update_story(story_code)
+            logging.debug('HNSUpdateTodayStoriesData: Sleeping for 5 minutes')
             time.sleep(FIVE_MINUTES)
 
 
-class HNSUpdateOldStoriesData(threading.Thread):
-    crawler = HackerNewsCrawler()
-    service = Service.objects.get(slug='hn')
+class HNSUpdateOldStoriesData(HackerNewsService):
     def run(self):
-        print('HNSUpdateOldStoriesData: Starting')
+        logging.debug('HNSUpdateOldStoriesData: Starting')
         run_count = 0
         while True:
             run_count = run_count + 1
-            print('HNSUpdateOldStoriesData: Run #{0}'.format(run_count))
-            for story in self.service.stories.all():
-                self.crawler.update_story(story)
-            print('HNSUpdateOldStoriesData: Sleeping for 12 hours')
+            logging.debug('HNSUpdateOldStoriesData: Run #{0}'.format(run_count))
+            stories = self.service.stories.all().values_list('code', flat=True)
+            for story_code in stories:
+                self.crawler.update_story(story_code)
+            logging.debug('HNSUpdateOldStoriesData: Sleeping for 12 hours')
             time.sleep(TWELVE_HOURS)
 
 

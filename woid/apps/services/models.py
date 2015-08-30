@@ -8,6 +8,8 @@ from woid.apps.services.managers import ServiceManager, StoryManager
 class Service(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
+    url = models.URLField()
+    story_url = models.URLField()
 
     objects = ServiceManager()
 
@@ -18,35 +20,57 @@ class Service(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Story(models.Model):
+    TEXT = 'T'
+    URL = 'U'
+    CONTENT_TYPES = (
+        (TEXT, 'Text'),
+        (URL, 'URL'),
+    )
+
+    NEW = 'N'
+    OK = 'O'
+    ERROR = 'E'
+    STATUS = (
+        (NEW, 'New'),
+        (OK, 'Ok'),
+        (ERROR, 'Error'),
+    )
+
     service = models.ForeignKey(Service, related_name='stories')
     code = models.CharField(max_length=255)
     title = models.CharField(max_length=500, null=True, blank=True)
     url = models.URLField(max_length=2000, null=True, blank=True)
+    content = models.CharField(max_length=4000, null=True, blank=True)
+    content_type = models.CharField(max_length=1, default=TEXT, choices=CONTENT_TYPES)
     comments = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
-    date = models.DateField(auto_now_add=True)
-    visited_at = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=1, default=NEW, choices=STATUS)
 
     objects = StoryManager()
 
     class Meta:
         verbose_name = 'story'
         verbose_name_plural = 'stories'
-        unique_together = (('service', 'code'),)
+        unique_together = (('service', 'code', 'date'),)
         ordering = ('-score',)
 
     def __unicode__(self):
         return self.code
 
+
 class StoryUpdate(models.Model):
     story = models.ForeignKey(Story, related_name='updates')
+    comments_changes = models.IntegerField(default=0)
+    score_changes = models.IntegerField(default=0)
     updated_at = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=500, null=True, blank=True)
-    comments = models.IntegerField(default=0)
-    score = models.IntegerField(default=0)
 
-    def __unicode__(self):
+    class Meta:
+        db_table = 'services_story_update'
         verbose_name = 'story update'
         verbose_name_plural = 'stories updates'
+
+    def __unicode__(self):
         return self.story.code

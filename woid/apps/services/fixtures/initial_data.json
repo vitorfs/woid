@@ -4,7 +4,9 @@
     "pk": 1,
     "fields": {
       "name": "hacker news",
-      "slug": "hn"
+      "slug": "hn",
+      "url": "https://news.ycombinator.com/news",
+      "story_url": "https://news.ycombinator.com/item?id="
     }
   },
   {
@@ -12,7 +14,9 @@
     "pk": 2,
     "fields": {
       "name": "reddit",
-      "slug": "reddit"
+      "slug": "reddit",
+      "url": "https://www.reddit.com",
+      "story_url": "https://www.reddit.com/r/"
     }
   }
 ]
