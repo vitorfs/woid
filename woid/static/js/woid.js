@@ -6,4 +6,12 @@ $(function () {
     });
   });
 
+  var updateTime = function () {
+    var time = moment().tz('UTC').format('dddd, MMMM D YYYY, HH:mm:ss ZZ [UTC]');
+    $('.utc').html(time);
+    setTimeout(updateTime, 500);
+  };
+
+  updateTime();
+
 });

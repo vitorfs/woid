@@ -245,3 +245,15 @@ ul li a.active {
   color: #333;
   font-weight: 500;
 }
+
+main h2 small {
+  font-size: 60%;
+  color: #aaa;
+}
+
+.utc {
+  float: right;
+  font-size: 12px;
+  line-height: 40px;
+  font-weight: 400;
+}

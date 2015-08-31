@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+  <h2>{{ service.name }} <small>({{ str_date }})</small></h2>
   {% include 'services/includes/menu.html' %}
   <ol>
     {% for story in stories %}
