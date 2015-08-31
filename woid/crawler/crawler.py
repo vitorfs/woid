@@ -1,7 +1,5 @@
 # coding: utf-8
 
-from datetime import datetime
-
 from django.utils import timezone
 
 from woid.apps.services.models import Service, Story, StoryUpdate
@@ -28,7 +26,7 @@ class HackerNewsCrawler(object):
                 return
 
             if story.status == Story.NEW:
-                story.date = datetime.fromtimestamp(story_data.get('time'), timezone.get_current_timezone())
+                story.date = timezone.datetime.fromtimestamp(story_data.get('time'), timezone.get_current_timezone())
                 story.url = u'{0}{1}'.format(story.service.story_url, story.code)
             
             score = story_data.get('score', 0)
@@ -54,6 +52,37 @@ class HackerNewsCrawler(object):
             if text:
                 story.content_type = Story.TEXT
                 story.content = text
+
+            story.status = Story.OK
+            story.save()
+
+class RedditCrawler(object):
+    def __init__(self):
+        self.service = Service.objects.get(slug='reddit')
+        self.client = RedditClient()
+
+    def update_top_stories(self):
+        stories = self.client.get_front_page_stories()
+        for data in stories:
+            story_data = data['data']
+            story, created = Story.objects.get_or_create(service=self.service, code=story_data.get('permalink'))
+            if created:
+                story.date = timezone.datetime.fromtimestamp(story_data.get('created_utc'), timezone.get_current_timezone())
+                story.build_url()
+
+            score = story_data.get('score', 0)
+            comments = story_data.get('num_comments', 0)
+            has_changes = (score != story.score or comments != story.comments)
+
+            if not story.status == Story.NEW and has_changes:
+                    update = StoryUpdate(story=story)
+                    update.comments_changes = comments - story.comments
+                    update.score_changes = score - story.score
+                    update.save()
+
+            story.comments = comments
+            story.score = score
+            story.title = story_data.get('title', '')
 
             story.status = Story.OK
             story.save()

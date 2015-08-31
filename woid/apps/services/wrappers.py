@@ -29,4 +29,4 @@ class RedditClient(object):
     def get_front_page_stories(self):
         r = requests.get('https://www.reddit.com/.json', headers=self.headers)
         result = r.json()
-        return result
+        return result['data']['children']

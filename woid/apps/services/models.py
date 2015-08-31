@@ -62,6 +62,10 @@ class Story(models.Model):
     def __unicode__(self):
         return self.code
 
+    def build_url(self):
+        self.url = u'{0}{1}'.format(self.service.story_url, self.code)
+        return self.url
+
 
 class StoryUpdate(models.Model):
     story = models.ForeignKey(Story, related_name='updates')
