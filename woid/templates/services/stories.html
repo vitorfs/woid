@@ -7,9 +7,9 @@
 {% endblock %}
 
 {% block content %}
-  <h2>{{ service.name }} <small>({{ str_date }})</small></h2>
+  <h2>{{ service.name }} <small>({{ subtitle }})</small></h2>
   {% include 'services/includes/menu.html' %}
-  <ol>
+  <ol start="{{ start }}">
     {% for story in stories %}
       <li>
         <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
@@ -23,4 +23,26 @@
       </li>
     {% endfor %}
   </ol>
+
+  <ul>
+    {% if stories.has_previous %}
+      <li><a href="?page={{ stories.previous_page_number }}">&laquo; previous</a></li>
+    {% else %}
+      <li>&laquo; previous</li>
+    {% endif %}
+
+    {% for i in stories.paginator.page_range %}
+      {% if stories.number == i %}
+        <li>{{ i }}</li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if stories.has_next %}
+      <li><a href="?page={{ stories.next_page_number }}">next &raquo;</a></li>
+    {% else %}
+      <li>next &raquo;</li>
+    {% endif %}
+  </ul>
 {% endblock %}

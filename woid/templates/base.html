@@ -15,7 +15,7 @@
   <header>
     <a href="{% url 'home' %}">woid</a>
     {% if user.is_authenticated %}
-      <nav><a href="{% url 'signup' %}">{{ user.username }}</a> / <a href="{% url 'logout' %}">logout</a></nav>
+      <nav><a href="{% url 'home' %}">{{ user.username }}</a> / <a href="{% url 'logout' %}">logout</a></nav>
     {% else %}
       <nav><a href="{% url 'signup' %}">sign up</a> / <a href="{% url 'login' %}">login</a></nav>
     {% endif %}
