@@ -21,7 +21,7 @@ body {
   line-height: 1.42857143;
   width: 960px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 30px;
   color: #333;
 }
 
@@ -116,7 +116,7 @@ h3 {
 }
 
 main > ol {
-  padding-left: 17px;
+  padding-left: 0;
   margin-bottom: 20px;
 }
 

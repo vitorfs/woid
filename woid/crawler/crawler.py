@@ -11,13 +11,13 @@ class HackerNewsCrawler(object):
         self.service = Service.objects.get(slug='hn')
         self.client = HackerNewsClient()
 
-    def index_all_stories(self):
+    def index_all_stories(self, start=1, offset=1):
         max_item = self.client.get_max_item()
-        i = 1
+        i = start
         while i < max_item:
             print('Indexing {0}...'.format(i))
             self.update_story(i)
-            i += 1
+            i += offset
 
     def update_top_stories(self):
         stories = self.client.get_top_stories()

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load staticfiles month_name %}
 
 {% block javascript %}
   <script src="{% static 'js/services/stories.js' %}"></script>
@@ -19,7 +19,7 @@
       <ul>
         {% for month_stories in month_story_list %}
           <li>
-            <a href="{% url 'services:month' service.slug year_stories.grouper month_stories.grouper %}">{{ month_stories.grouper }}</a>
+            <a href="{% url 'services:month' service.slug year_stories.grouper month_stories.grouper %}">{{ month_stories.grouper|month_name }}</a>
             {% regroup month_stories.list|dictsort:'date' by date|date:'d' as day_story_list %}
             <ul>
               {% for day_stories in day_story_list %}

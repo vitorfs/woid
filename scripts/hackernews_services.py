@@ -78,15 +78,21 @@ class HNSUpdateOldStoriesData(HackerNewsService):
             time.sleep(TWELVE_HOURS)
 
 class HNSIndexAllStories(HackerNewsService):
+    def __init__(self, start_id=1, offset=1):
+        super(HNSIndexAllStories, self).__init__()
+        self.start_id = start_id
+        self.offset = offset
+
     def run(self):
-        self.crawler.index_all_stories()
+        self.crawler.index_all_stories(self.start_id, self.offset)
 
 def main():
-    HNSUpdateTopStories().start()
+    '''HNSUpdateTopStories().start()
     HNSUpdateTodayStoriesData().start()
-    HNSUpdateOldStoriesData().start()
-    HNSIndexAllStories().start()
-
+    HNSUpdateOldStoriesData().start()'''
+    HNSIndexAllStories(start_id=1, offset=3).start()
+    HNSIndexAllStories(start_id=2, offset=3).start()
+    HNSIndexAllStories(start_id=3, offset=3).start()
 
 if __name__ == '__main__':
     main()
