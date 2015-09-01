@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import logging
 import requests
 from firebase import firebase
 
@@ -27,13 +28,21 @@ class RedditClient(object):
         self.headers = { 'user-agent': 'woid/1.0' }
 
     def get_front_page_stories(self):
-        r = requests.get('https://www.reddit.com/.json', headers=self.headers)
-        result = r.json()
-        stories = result['data']['children']
-        count = 25
-        while result['data']['after']:
-            r = requests.get(u'https://www.reddit.com/.json?count={0}&after={1}'.format(count, result['data']['after']), headers=self.headers)
+        r = None
+        stories = list()
+        
+        try:
+            r = requests.get('https://www.reddit.com/.json', headers=self.headers)
             result = r.json()
-            stories.extend(result['data']['children'])
-            count += 25
+            stories = result['data']['children']
+            count = 25
+            while result['data']['after']:
+                r = requests.get(u'https://www.reddit.com/.json?count={0}&after={1}'.format(count, result['data']['after']), headers=self.headers)
+                result = r.json()
+                stories.extend(result['data']['children'])
+                count += 25
+        except ValueError, e:
+            logging.error(e)
+            logging.error(r)
+
         return stories

@@ -10,7 +10,6 @@ import django
 django.setup()
 
 
-import logging
 import time
 import threading
 
