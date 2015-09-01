@@ -77,11 +77,15 @@ class HNSUpdateOldStoriesData(HackerNewsService):
             logging.debug('HNSUpdateOldStoriesData: Sleeping for 12 hours')
             time.sleep(TWELVE_HOURS)
 
+class HNSIndexAllStories(HackerNewsService):
+    def run(self):
+        self.crawler.index_all_stories()
 
 def main():
     HNSUpdateTopStories().start()
     HNSUpdateTodayStoriesData().start()
     HNSUpdateOldStoriesData().start()
+    HNSIndexAllStories().start()
 
 
 if __name__ == '__main__':

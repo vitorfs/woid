@@ -60,20 +60,53 @@ header nav a {
   vertical-align: middle;
 }
 
-main > ul {
+.wrapper {
+  position: relative;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -40px;
+}
+
+.push {
+  height: 40px;
+}
+
+footer {
+  border-top: 1px solid #eee;
+  height: 40px;
+  position: relative;
+  padding-top: 7px;
+}
+
+footer a {
+  font-size: 12px;
+  margin-right: 10px;
+}
+
+ul[class^='menu-'] {
   margin: 0 0 20px 0;
   padding: 0;
 }
 
-main > ul li {
+ul[class^='menu-'] li {
   list-style: none;
   display: inline;
 }
 
-main > ul li + li:before {
+ul[class^='menu-'] li + li:before {
   padding: 0 5px;
   color: #ccc;
   content: "/\00a0";
+}
+
+ul.paginator {
+  padding: 0;
+}
+
+ul.paginator li {
+  list-style: none;
+  display: inline;
 }
 
 h1, 
@@ -248,7 +281,7 @@ ul li a.active {
 }
 
 main h2 small {
-  font-size: 60%;
+  font-size: 70%;
   color: #aaa;
 }
 
@@ -257,4 +290,8 @@ main h2 small {
   font-size: 12px;
   line-height: 40px;
   font-weight: 400;
+}
+
+ul.archive {
+  padding: 0;
 }

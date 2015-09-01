@@ -12,28 +12,36 @@
   {% endcompress %}
 </head>
 <body>
-  <header>
-    <a href="{% url 'home' %}">woid</a>
-    {% if user.is_authenticated %}
-      <nav><a href="{% url 'home' %}">{{ user.username }}</a> / <a href="{% url 'logout' %}">logout</a></nav>
-    {% else %}
-      <nav><a href="{% url 'signup' %}">sign up</a> / <a href="{% url 'login' %}">login</a></nav>
-    {% endif %}
-  </header>
-  <main>
-  {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-      <a href="javascript:void(0);" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-      {{ message }}
-    </div>
-  {% endfor %}
-  {% block menu %}
-    <h1>top stories<span class="utc"></span></h1>
-    {% include 'includes/menu.html' %}
-  {% endblock %}
-  {% block content %}{% endblock %}
-  </main>
-  <footer></footer>
+  <div class="wrapper">
+    <header>
+      <a href="{% url 'home' %}">woid</a>
+      {% if user.is_authenticated %}
+        <nav><a href="{% url 'home' %}">{{ user.username }}</a> / <a href="{% url 'logout' %}">logout</a></nav>
+      {% else %}
+        <nav><a href="{% url 'signup' %}">sign up</a> / <a href="{% url 'login' %}">login</a></nav>
+      {% endif %}
+    </header>
+    <main>
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        <a href="javascript:void(0);" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+        {{ message }}
+      </div>
+    {% endfor %}
+    {% block menu %}
+      <h1>top stories<span class="utc"></span></h1>
+      {% include 'includes/menu.html' %}
+    {% endblock %}
+    {% block content %}{% endblock %}
+    </main>
+    <div class="push"></div>
+  </div>
+  <footer>
+    <a href="">about</a>
+    <a href="">cookies</a>
+    <a href="">privacy</a>
+    <a href="">terms</a>
+  </footer>
   {% compress js %}
   <script src="{% static 'js/ga.js' %}"></script>
   <script src="{% static 'js/vendor/jquery-1.11.3.min.js' %}"></script>

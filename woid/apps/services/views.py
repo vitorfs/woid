@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from collections import OrderedDict
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
@@ -52,6 +54,11 @@ def day(request, slug, year, month, day):
 
 def archive(request, slug):
     service = get_object_or_404(Service, slug=slug)
+    dates = service.stories.all().order_by('-date').values_list('date', flat=True)
+    str_dates = map(lambda date: date.strftime('%Y-%m-%d'), dates)
+
+    archive = dates
     return render(request, 'services/archive.html', {
-        'service': service
+        'service': service,
+        'archive': archive
     })
