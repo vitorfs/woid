@@ -3,6 +3,7 @@
 from collections import OrderedDict
 from itertools import groupby
 
+from django.db.models import Max
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
@@ -34,7 +35,12 @@ def stories(request, service, queryset, subtitle):
 
 def all(request):
     today = timezone.now()
-    stories = Story.objects.filter(status=Story.OK, date__year=today.year, date__month=today.month, date__day=today.day)[:10]
+    stories = list()
+    services = Service.objects.all()
+    for service in services:
+        top_story = service.stories.filter(status=Story.OK, date__year=today.year, date__month=today.month, date__day=today.day).order_by('-score').first()
+        stories.append(top_story)
+    print stories
     subtitle = today.strftime('%d %b %Y')
     return render(request, 'services/all.html', { 'stories': stories, 'subtitle': subtitle })
 

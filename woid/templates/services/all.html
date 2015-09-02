@@ -8,18 +8,9 @@
 
 {% block content %}
   <h2>all <small>({{ subtitle }})</small></h2>
-  <ol>
+  <ul class="stories">
     {% for story in stories %}
-      <li>
-        <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
-        <p>
-          {{ story.score }} point{{ story.score|pluralize }} 
-          &bullet;
-          {{ story.comments }} comment{{ story.comments|pluralize }}
-          &bullet;
-          {{ story.date|date:'M d, Y'|lower }}
-        </p>
-      </li>
+      {% include story.get_template with append_service=True %}
     {% endfor %}
-  </ol>
+  </ul>
 {% endblock %}

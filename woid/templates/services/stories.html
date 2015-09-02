@@ -9,7 +9,7 @@
 {% block content %}
   <h2>{{ service.name }} <small>({{ subtitle }})</small></h2>
   {% include 'services/includes/menu.html' %}
-  <ol start="{{ start }}">
+  <ol class="stories" start="{{ start }}">
     {% for story in stories %}
       {% include story.get_template %}
     {% endfor %}
