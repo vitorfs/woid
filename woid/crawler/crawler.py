@@ -135,10 +135,17 @@ class GithubCrawler(object):
 
                 story.score = stars
 
-                if data['description']:
-                    story.title = u'{0} ({1})'.format(data.get('name'), data.get('description'))
-                else:
-                    story.title = data.get('name')
+                story.title = data.get('name')[1:]
+
+                description = data.get('description', '')
+                language = data.get('language', '')
+
+                if language and description:
+                    description = u'{0} • {1}'.format(language, description)
+                elif language:
+                    description = language
+
+                story.description = description
 
                 story.status = Story.OK
                 story.save()

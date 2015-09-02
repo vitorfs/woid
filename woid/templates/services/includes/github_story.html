@@ -1,5 +1,8 @@
+{% load github_title %}
+
 <li>
-  <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
+  <a href="{{ story.url }}" target="_blank">{{ story.title|github_title|safe }}</a>
+  <small>{{ story.description }}</small>
   <p>
     {{ story.score }} star{{ story.score|pluralize }} 
     &bullet;

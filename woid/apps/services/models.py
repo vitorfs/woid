@@ -52,6 +52,7 @@ class Story(models.Model):
     status = models.CharField(max_length=1, default=NEW, choices=STATUS)
     top_ten = models.BooleanField(default=False)
     nsfw = models.BooleanField(default=False)
+    description = models.CharField(max_length=2000, null=True, blank=True)
 
     objects = StoryManager()
 
