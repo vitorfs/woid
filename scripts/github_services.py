@@ -19,7 +19,7 @@ from woid.crawler.crawler import GithubCrawler
 from woid.apps.services.models import Service, Story
 
 
-FIVE_MINUTES = 5 * 60
+THIRTY_MINUTES = 30 * 60
 GITHUB_SLUG = 'github'
 
 
@@ -34,7 +34,7 @@ class GSUpdateTrendingRepositories(GithubService):
     def run(self):
         while True:
             self.crawler.update_today_trending_repositories()
-            time.sleep(FIVE_MINUTES)
+            time.sleep(THIRTY_MINUTES)
 
 
 def main():
