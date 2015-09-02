@@ -32,6 +32,12 @@ def stories(request, service, queryset, subtitle):
         'start': start
     })
 
+def all(request):
+    today = timezone.now()
+    queryset = Story.objects.filter(status=Story.OK, date__year=today.year, date__month=today.month, date__day=today.day)[:10]
+    subtitle = today.strftime('%d %b %Y')
+    return render(request, 'services/all.html', { 'stories': stories, 'subtitle': subtitle })
+
 def index(request, slug):
     today = timezone.now()
     return day(request, slug, today.year, today.month, today.day)
