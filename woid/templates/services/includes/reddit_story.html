@@ -1,5 +1,8 @@
 <li>
   <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
+  {% if story.nsfw %}
+  <small class="nsfw">[nsfw]</small>
+  {% endif %}
   <p>
     {{ story.score }} point{{ story.score|pluralize }} 
     &bullet;

@@ -297,3 +297,8 @@ main h2 small {
   line-height: 40px;
   font-weight: 400;
 }
+
+.nsfw {
+  font-weight: 600;
+  color: #cc6257;
+}

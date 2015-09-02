@@ -104,6 +104,7 @@ class RedditCrawler(object):
                 story.comments = comments
                 story.score = score
                 story.title = story_data.get('title', '')
+                story.nsfw = story_data.get('over_18', False)
 
                 story.status = Story.OK
                 story.save()
