@@ -122,7 +122,13 @@ main > ol {
 
 main > ol li {
   padding-left: 5px;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
+}
+
+main > ol li p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #666;
 }
 
 button {

@@ -26,9 +26,9 @@ class Story(models.Model):
     URL = 'U'
     IMAGE = 'I'
     CONTENT_TYPES = (
-        (TEXT, 'Text'),
-        (URL, 'URL'),
-        (IMAGE, 'Image'),
+        (TEXT, 'text'),
+        (URL, 'url'),
+        (IMAGE, 'image'),
     )
 
     NEW = 'N'

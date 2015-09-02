@@ -13,13 +13,15 @@
     {% for story in stories %}
       <li>
         <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
-        <small>
+        <p>
           {{ story.score }} point{{ story.score|pluralize }} 
           &bullet;
           {{ story.comments }} comment{{ story.comments|pluralize }}
           &bullet;
           {{ story.date|date:'M d, Y'|lower }}
-        </small>
+          &bullet;
+          {{ story.get_content_type_display }}
+        </p>
       </li>
     {% endfor %}
   </ol>
