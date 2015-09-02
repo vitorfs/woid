@@ -7,8 +7,10 @@
   {% endif %}
   <p>
     {{ story.score }} star{{ story.score|pluralize }} 
-    &bullet;
-    {{ story.description }}
+    {% if story.description %}
+      &bullet;
+      {{ story.description }}
+    {% endif %}
     &bullet;
     {{ story.date|date:'M d, Y'|lower }}
   </p>

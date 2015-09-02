@@ -25,6 +25,7 @@ class HackerNewsClient(object):
         result = self.firebase_app.get('/v0/maxitem', None)
         return result
 
+
 class RedditClient(object):
     def __init__(self):
         self.headers = { 'user-agent': 'woid/1.0' }
@@ -48,6 +49,7 @@ class RedditClient(object):
             logging.error(r)
 
         return stories
+
 
 class GithubClient(object):
     def __init__(self):
@@ -83,3 +85,15 @@ class GithubClient(object):
             data.append(repo_data)
         
         return data
+
+
+class MediumClient(object):
+    def __init__(self):
+        self.headers = { 'user-agent': 'woid/1.0' }
+
+    def get_top_stories(self):
+        r = requests.get('https://medium.com/top-stories', headers=self.headers)
+        html = r.text
+        soup = BeautifulSoup(html, 'html.parser')
+        stories = soup(attrs={ 'class': 'postItem' })
+        

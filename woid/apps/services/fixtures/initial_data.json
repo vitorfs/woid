@@ -25,8 +25,18 @@
     "fields": {
       "name": "github",
       "slug": "github",
-      "url": "https://github.com",
+      "url": "https://github.com/trending",
       "story_url": "https://github.com"
+    }
+  },
+  {
+    "model": "services.Service",
+    "pk": 4,
+    "fields": {
+      "name": "medium",
+      "slug": "medium",
+      "url": "https://medium.com/top-stories",
+      "story_url": "https://medium.com"
     }
   }
 ]

@@ -5,4 +5,5 @@
   <li><a href="{% url 'services:index' 'hackernews' %}"{% if request.path|startswith:'/hackernews/' %} class="active"{% endif %}>hacker news</a></li>
   <li><a href="{% url 'services:index' 'reddit' %}"{% if request.path|startswith:'/reddit/' %} class="active"{% endif %}>reddit</a></li>
   <li><a href="{% url 'services:index' 'github' %}"{% if request.path|startswith:'/github/' %} class="active"{% endif %}>github</a></li>
+  <li><a href="{% url 'services:index' 'medium' %}"{% if request.path|startswith:'/medium/' %} class="active"{% endif %}>medium</a></li>
 </ul>
