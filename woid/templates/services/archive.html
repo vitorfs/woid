@@ -9,28 +9,23 @@
 {% block content %}
   <h2>{{ service.name }} <small>(archive)</small></h2>
   {% include 'services/includes/menu.html' %}
-
-  {% regroup service.stories.all|dictsortreversed:'date' by date|date:'Y' as year_story_list %}
   <ul class="archive">
-  {% for year_stories in year_story_list %}
-    <li>
-      <a href="{% url 'services:year' service.slug year_stories.grouper %}">{{ year_stories.grouper }}</a>
-      {% regroup year_stories.list|dictsort:'date' by date|date:'m' as month_story_list %}
-      <ul>
-        {% for month_stories in month_story_list %}
-          <li>
-            <a href="{% url 'services:month' service.slug year_stories.grouper month_stories.grouper %}">{{ month_stories.grouper|month_name }}</a>
-            {% regroup month_stories.list|dictsort:'date' by date|date:'d' as day_story_list %}
-            <ul>
-              {% for day_stories in day_story_list %}
-                <li><a href="{% url 'services:day' service.slug year_stories.grouper month_stories.grouper day_stories.grouper %}">{{ day_stories.grouper }}</a></li>
-              {% endfor %}
-            </ul>
-          </li>
+    {% for year, months in archive.iteritems %}
+      <li>
+        <a href="{% url 'services:year' service.slug year %}">{{ year }}</a>
+        {% for month, days in months.iteritems %}
+          <ul>
+            <li>
+              <a href="{% url 'services:month' service.slug year month %}">{{ month|month_name }}</a>
+              <ul>
+                {% for day in days %}
+                  <li><a href="{% url 'services:day' service.slug year month day %}">{{ day }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          </ul>
         {% endfor %}
-      </ul>
-    </li>
-  {% endfor %}
+      </li>
+    {% endfor %}
   </ul>
-
 {% endblock %}

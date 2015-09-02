@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from collections import OrderedDict
+from itertools import groupby
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
@@ -52,12 +53,26 @@ def day(request, slug, year, month, day):
     subtitle = timezone.datetime(int(year), int(month), int(day)).strftime('%d %b %Y')
     return stories(request, service, queryset, subtitle)
 
+def remove_duplicates(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
+
 def archive(request, slug):
     service = get_object_or_404(Service, slug=slug)
+
     dates = service.stories.all().order_by('-date').values_list('date', flat=True)
     str_dates = map(lambda date: date.strftime('%Y-%m-%d'), dates)
+    str_dates = remove_duplicates(str_dates)
 
-    archive = dates
+    archive = OrderedDict()
+    for year, months in groupby(str_dates, lambda date: date[:4]):
+        archive[year] = OrderedDict()
+        for month, days in groupby(months, lambda date: date[5:7]):
+            archive[year][month] = list()
+            for day in days:
+                archive[year][month].append(day[8:10])
+
     return render(request, 'services/archive.html', {
         'service': service,
         'archive': archive
