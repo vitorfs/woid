@@ -84,6 +84,10 @@ footer a {
   margin-right: 10px;
 }
 
+ul {
+  padding: 0;
+}
+
 ul[class^='menu-'] {
   margin: 0 0 20px 0;
   padding: 0;
@@ -98,10 +102,6 @@ ul[class^='menu-'] li + li:before {
   padding: 0 5px;
   color: #ccc;
   content: "/\00a0";
-}
-
-ul.paginator {
-  padding: 0;
 }
 
 ul.paginator li {
@@ -296,8 +296,4 @@ main h2 small {
   font-size: 12px;
   line-height: 40px;
   font-weight: 400;
-}
-
-ul.archive {
-  padding: 0;
 }

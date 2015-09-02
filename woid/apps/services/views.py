@@ -55,7 +55,7 @@ def month(request, slug, year, month):
 
 def day(request, slug, year, month, day):
     service = get_object_or_404(Service, slug=slug)
-    queryset = service.stories.filter(status=Story.OK, date__year=year, date__month=month, date__day=day)
+    queryset = service.stories.filter(status=Story.OK, date__year=year, date__month=month, date__day=day)[:10]
     subtitle = timezone.datetime(int(year), int(month), int(day)).strftime('%d %b %Y')
     return stories(request, service, queryset, subtitle)
 

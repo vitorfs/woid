@@ -19,8 +19,6 @@
           {{ story.comments }} comment{{ story.comments|pluralize }}
           &bullet;
           {{ story.date|date:'M d, Y'|lower }}
-          &bullet;
-          {{ story.get_content_type_display }}
         </p>
       </li>
     {% endfor %}

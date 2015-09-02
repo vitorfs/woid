@@ -9,7 +9,7 @@
 {% block content %}
   <h2>{{ service.name }} <small>(archive)</small></h2>
   {% include 'services/includes/menu.html' %}
-  <ul class="archive">
+  <ul>
     {% for year, months in archive.iteritems %}
       <li>
         <a href="{% url 'services:year' service.slug year %}">{{ year }}</a>
