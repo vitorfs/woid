@@ -5,7 +5,7 @@ import logging
 from django.utils import timezone
 
 from woid.apps.services.models import Service, Story, StoryUpdate
-from woid.apps.services.wrappers import HackerNewsClient, RedditClient, GithubClient
+from woid.apps.services.wrappers import HackerNewsClient, RedditClient, GithubClient, MediumClient
 
 
 class HackerNewsCrawler(object):
@@ -111,6 +111,7 @@ class RedditCrawler(object):
         except Exception, e:
             logging.error(e)
 
+
 class GithubCrawler(object):
     def __init__(self):
         self.service = Service.objects.get(slug='github')
@@ -152,6 +153,45 @@ class GithubCrawler(object):
                     description = language
 
                 story.description = description
+
+                story.status = Story.OK
+                story.save()
+
+        except Exception, e:
+            logging.error(e)
+
+
+class MediumCrawler(object):
+    def __init__(self):
+        self.service = Service.objects.get(slug='medium')
+        self.client = MediumClient()
+
+    def update_top_stories(self):
+        try:
+            posts = self.client.get_top_stories()
+            today = timezone.now()
+            for post_data in posts:
+                story, created = Story.objects.get_or_create(service=self.service, code=post_data['id'], date=timezone.datetime(today.year, today.month, today.day, tzinfo=timezone.get_current_timezone()))
+
+                if created:
+                    story.url = u'{0}/@{1}/{2}'.format(self.service.story_url, post_data['creator']['username'], post_data['id'])
+                    story.start_score = int(post_data['virtuals']['recommends'])
+                    story.start_comments = int(post_data['virtuals']['responsesCreatedCount'])
+                
+                story.title = post_data['title']
+
+                recommends = int(post_data['virtuals']['recommends']) - story.start_score
+                comments = int(post_data['virtuals']['responsesCreatedCount']) - story.start_comments
+                has_changes = (recommends != story.score or comments != story.comments)
+
+                if not story.status == Story.NEW and has_changes:
+                    update = StoryUpdate(story=story)
+                    update.comments_changes = comments - story.comments
+                    update.score_changes = recommends - story.score
+                    update.save()
+
+                story.score = recommends
+                story.comments = comments
 
                 story.status = Story.OK
                 story.save()

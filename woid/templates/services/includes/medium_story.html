@@ -1,0 +1,13 @@
+<li>
+  <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
+  {% if append_service %}
+    <small><strong>{{ story.service.name }}</strong></small>
+  {% endif %}
+  <p>
+    {{ story.score }} recommend{{ story.score|pluralize }} 
+    &bullet;
+    {{ story.comments }} comment{{ story.comments|pluralize }}
+    &bullet;
+    {{ story.date|date:'M d, Y'|lower }}
+  </p>
+</li>

@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import logging
+import json
 
 from bs4 import BeautifulSoup
 import requests
@@ -92,8 +93,7 @@ class MediumClient(object):
         self.headers = { 'user-agent': 'woid/1.0' }
 
     def get_top_stories(self):
-        r = requests.get('https://medium.com/top-stories', headers=self.headers)
-        html = r.text
-        soup = BeautifulSoup(html, 'html.parser')
-        stories = soup(attrs={ 'class': 'postItem' })
-        
+        r = requests.get('https://medium.com/top-stories?format=json', headers=self.headers)
+        text_data = r.text[16:] # remove ])}while(1);</x>
+        json_data = json.loads(text_data)
+        return json_data['payload']['value']['posts']
