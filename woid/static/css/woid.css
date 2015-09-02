@@ -84,7 +84,8 @@ footer a {
   margin-right: 10px;
 }
 
-main > ul {
+main > ul,
+main > ol {
   padding: 0;
 }
 
