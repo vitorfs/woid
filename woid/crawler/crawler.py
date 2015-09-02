@@ -126,7 +126,13 @@ class GithubCrawler(object):
                     story.build_url()
 
                 stars = data.get('stars', 0)
-                has_changes = (stars != story.score)
+                '''
+                    Because of the nature of the github trending repositories
+                    we are only interested on changes where the stars have increased
+                    this way the crawler is gonna campure the highest starts one repository
+                    got in a single day
+                '''
+                has_changes = (stars > story.score)
 
                 if not story.status == Story.NEW and has_changes:
                     update = StoryUpdate(story=story)
