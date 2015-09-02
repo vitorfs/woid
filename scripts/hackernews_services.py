@@ -87,12 +87,14 @@ class HNSIndexAllStories(HackerNewsService):
         self.crawler.index_all_stories(self.start_id, self.offset)
 
 def main():
-    '''HNSUpdateTopStories().start()
+    HNSUpdateTopStories().start()
     HNSUpdateTodayStoriesData().start()
-    HNSUpdateOldStoriesData().start()'''
+    HNSUpdateOldStoriesData().start()
+    HNSIndexAllStories().start()
+    '''
     HNSIndexAllStories(start_id=1, offset=3).start()
     HNSIndexAllStories(start_id=2, offset=3).start()
     HNSIndexAllStories(start_id=3, offset=3).start()
-
+    '''
 if __name__ == '__main__':
     main()
