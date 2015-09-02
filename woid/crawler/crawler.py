@@ -18,7 +18,6 @@ class HackerNewsCrawler(object):
             max_item = self.client.get_max_item()
             i = start
             while i < max_item:
-                print('Indexing {0}...'.format(i))
                 self.update_story(i)
                 i += offset
         except Exception, e:
