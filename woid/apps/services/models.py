@@ -48,7 +48,7 @@ class Story(models.Model):
     content_type = models.CharField(max_length=1, choices=CONTENT_TYPES, null=True, blank=True)
     comments = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=1, default=NEW, choices=STATUS)
     top_ten = models.BooleanField(default=False)
 
@@ -66,6 +66,10 @@ class Story(models.Model):
     def build_url(self):
         self.url = u'{0}{1}'.format(self.service.story_url, self.code)
         return self.url
+
+    def get_template(self):
+        template = u'services/includes/{0}_story.html'.format(self.service.slug)
+        return template
 
 
 class StoryUpdate(models.Model):

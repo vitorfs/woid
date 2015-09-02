@@ -1,0 +1,8 @@
+<li>
+  <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
+  <p>
+    {{ story.score }} star{{ story.score|pluralize }} 
+    &bullet;
+    {{ story.date|date:'M d, Y'|lower }}
+  </p>
+</li>

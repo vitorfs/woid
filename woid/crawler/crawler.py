@@ -5,12 +5,12 @@ import logging
 from django.utils import timezone
 
 from woid.apps.services.models import Service, Story, StoryUpdate
-from woid.apps.services.wrappers import HackerNewsClient, RedditClient
+from woid.apps.services.wrappers import HackerNewsClient, RedditClient, GithubClient
 
 
 class HackerNewsCrawler(object):
     def __init__(self):
-        self.service = Service.objects.get(slug='hn')
+        self.service = Service.objects.get(slug='hackernews')
         self.client = HackerNewsClient()
 
     def index_all_stories(self, start=1, offset=1):
@@ -50,10 +50,10 @@ class HackerNewsCrawler(object):
                 has_changes = (score != story.score or comments != story.comments)
 
                 if not story.status == Story.NEW and has_changes:
-                        update = StoryUpdate(story=story)
-                        update.comments_changes = comments - story.comments
-                        update.score_changes = score - story.score
-                        update.save()
+                    update = StoryUpdate(story=story)
+                    update.comments_changes = comments - story.comments
+                    update.score_changes = score - story.score
+                    update.save()
 
                 story.comments = comments
                 story.score = score
@@ -96,10 +96,10 @@ class RedditCrawler(object):
                 has_changes = (score != story.score or comments != story.comments)
 
                 if not story.status == Story.NEW and has_changes:
-                        update = StoryUpdate(story=story)
-                        update.comments_changes = comments - story.comments
-                        update.score_changes = score - story.score
-                        update.save()
+                    update = StoryUpdate(story=story)
+                    update.comments_changes = comments - story.comments
+                    update.score_changes = score - story.score
+                    update.save()
 
                 story.comments = comments
                 story.score = score
@@ -107,5 +107,40 @@ class RedditCrawler(object):
 
                 story.status = Story.OK
                 story.save()
+        except Exception, e:
+            logging.error(e)
+
+class GithubCrawler(object):
+    def __init__(self):
+        self.service = Service.objects.get(slug='github')
+        self.client = GithubClient()
+
+    def update_today_trending_repositories(self):
+        try:
+            repos = self.client.get_today_trending_repositories()
+            today = timezone.now()
+            for data in repos:
+                story, created = Story.objects.get_or_create(service=self.service, code=data.get('name'), date=timezone.datetime(today.year, today.month, today.day, tzinfo=timezone.get_current_timezone()))
+                if created:
+                    story.build_url()
+
+                stars = data.get('stars', 0)
+                has_changes = (stars != story.score)
+
+                if not story.status == Story.NEW and has_changes:
+                    update = StoryUpdate(story=story)
+                    update.score_changes = stars - story.score
+                    update.save()
+
+                story.score = stars
+
+                if data['description']:
+                    story.title = u'{0} ({1})'.format(data.get('name'), data.get('description'))
+                else:
+                    story.title = data.get('name')
+
+                story.status = Story.OK
+                story.save()
+
         except Exception, e:
             logging.error(e)

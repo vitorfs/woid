@@ -21,7 +21,7 @@ from woid.apps.services.models import Service, Story
 
 FIVE_MINUTES = 5 * 60
 TWELVE_HOURS = 12 * 60 * 60
-HACKER_NEWS_SLUG = 'hn'
+HACKER_NEWS_SLUG = 'hackernews'
 
 
 class HackerNewsService(threading.Thread):

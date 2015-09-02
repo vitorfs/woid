@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "name": "hacker news",
-      "slug": "hn",
+      "slug": "hackernews",
       "url": "https://news.ycombinator.com/news",
       "story_url": "https://news.ycombinator.com/item?id="
     }
@@ -17,6 +17,16 @@
       "slug": "reddit",
       "url": "https://www.reddit.com",
       "story_url": "https://www.reddit.com"
+    }
+  },
+  {
+    "model": "services.Service",
+    "pk": 3,
+    "fields": {
+      "name": "github",
+      "slug": "github",
+      "url": "https://github.com",
+      "story_url": "https://github.com"
     }
   }
 ]

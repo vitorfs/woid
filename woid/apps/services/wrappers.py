@@ -1,6 +1,8 @@
 # coding: utf-8
 
 import logging
+
+from bs4 import BeautifulSoup
 import requests
 from firebase import firebase
 
@@ -46,3 +48,38 @@ class RedditClient(object):
             logging.error(r)
 
         return stories
+
+class GithubClient(object):
+    def __init__(self):
+        self.headers = { 'user-agent': 'woid/1.0' }
+
+    def get_today_trending_repositories(self):
+        r = requests.get('https://github.com/trending', headers=self.headers)
+        html = r.text
+        soup = BeautifulSoup(html, 'html.parser')
+        repos = soup(attrs={ 'class': 'repo-list-item' })
+        data = list()
+        for repo in repos:
+            repo_data = dict()
+            repo_data['name'] = repo.h3.a.get('href')
+
+            description = repo.find(attrs={'class': 'repo-list-description'})
+            if description:
+                description = description.text.strip()
+            else:
+                description = ''
+            repo_data['description'] = description
+
+            repo_meta = repo.find(attrs={'class': 'repo-list-meta'})
+            if repo_meta:
+                repo_meta = repo_meta.text.split()
+                if len(repo_meta) == 8: # means we have the repo language
+                    repo_data['language'] = repo_meta[0]
+                    repo_data['stars'] = int(repo_meta[2])
+                elif len(repo_meta) == 6: # means we do not have repo language
+                    repo_data['language'] = 'unknown'
+                    repo_data['stars'] = int(repo_meta[0])
+
+            data.append(repo_data)
+        
+        return data

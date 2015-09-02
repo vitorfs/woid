@@ -4,6 +4,6 @@ psycopg2==2.6.1
 python-decouple==2.3
 pytz==2015.4
 Unipath==1.1
-django-compressor==1.5
 python-firebase==1.2
 requests==2.7.0
+beautifulsoup4==4.4.0
