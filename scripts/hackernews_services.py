@@ -68,8 +68,8 @@ def main():
     HNSUpdateTopStories().start()
     HNSUpdateTodayStoriesData().start()
 
-    HNSIndexAllStories(start_id=29289, offset=2).start()
-    HNSIndexAllStories(start_id=29290, offset=2).start()
+    HNSIndexAllStories(start_id=101949, offset=2).start()
+    HNSIndexAllStories(start_id=101950, offset=2).start()
 
 
 if __name__ == '__main__':
