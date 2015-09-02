@@ -55,21 +55,22 @@ class HNSUpdateTodayStoriesData(HackerNewsService):
 
 
 class HNSIndexAllStories(HackerNewsService):
-    def __init__(self, start_id=1, offset=1):
+    def __init__(self, number=0, total=1):
         super(HNSIndexAllStories, self).__init__()
-        self.start_id = start_id
-        self.offset = offset
+        self.number = number
+        self.total = total
 
     def run(self):
-        self.crawler.index_all_stories(self.start_id, self.offset)
+        self.crawler.index_all_stories(self.number, self.total)
 
 
 def main():
     HNSUpdateTopStories().start()
     HNSUpdateTodayStoriesData().start()
 
-    HNSIndexAllStories(start_id=101949, offset=2).start()
-    HNSIndexAllStories(start_id=101950, offset=2).start()
+    HNSIndexAllStories(number=0, total=3).start()
+    HNSIndexAllStories(number=1, total=3).start()
+    HNSIndexAllStories(number=2, total=3).start()
 
 
 if __name__ == '__main__':

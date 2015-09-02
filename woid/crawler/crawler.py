@@ -13,13 +13,13 @@ class HackerNewsCrawler(object):
         self.service = Service.objects.get(slug='hackernews')
         self.client = HackerNewsClient()
 
-    def index_all_stories(self, start=1, offset=1):
+    def index_all_stories(self, number=0, total=1):
         try:
-            max_item = self.client.get_max_item()
-            i = start
-            while i < max_item:
-                self.update_story(i)
-                i += offset
+            i = self.client.get_max_item()
+            while i > 0:
+                if i % total == number:
+                    self.update_story(i)
+                i -= 1
         except Exception, e:
             logging.error(e)
 
@@ -34,7 +34,7 @@ class HackerNewsCrawler(object):
     def update_story(self, code):
         try:
             story_data = self.client.get_story(code)
-            if story_data:
+            if story_data and story_data['type'] == 'story':
                 story, created = Story.objects.get_or_create(service=self.service, code=code)
 
                 if story_data.get('deleted', False):
