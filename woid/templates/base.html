@@ -1,15 +1,13 @@
-{% load staticfiles compress %}<!DOCTYPE html>
+{% load staticfiles %}<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Woid{% endblock %}</title>
-  {% compress css %}
   <link href="{% static 'css/vendor/normalize.css' %}" rel="stylesheet">
   <link href="{% static 'css/woid.css' %}" rel="stylesheet">
   {% block stylesheet %}{% endblock %}
-  {% endcompress %}
 </head>
 <body>
   <div class="wrapper">
@@ -37,12 +35,11 @@
     <div class="push"></div>
   </div>
   <footer>
-    <a href="">about</a>
-    <a href="">cookies</a>
-    <a href="">privacy</a>
-    <a href="">terms</a>
+    <a href="{% url 'about' %}">about</a>
+    <a href="{% url 'cookies' %}">cookies</a>
+    <a href="{% url 'privacy' %}">privacy</a>
+    <a href="{% url 'terms' %}">terms</a>
   </footer>
-  {% compress js %}
   <script src="{% static 'js/ga.js' %}"></script>
   <script src="{% static 'js/vendor/jquery-1.11.3.min.js' %}"></script>
   <script src="{% static 'js/vendor/mustache.min.js' %}"></script>
@@ -50,6 +47,5 @@
   <script src="{% static 'js/vendor/moment-timezone-with-data-2010-2020.min.js' %}"></script>
   <script src="{% static 'js/woid.js' %}"></script>
   {% block javascript %}{% endblock %}
-  {% endcompress %}
 </body>
 </html>
