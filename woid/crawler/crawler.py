@@ -135,12 +135,13 @@ class GithubCrawler(object):
                 '''
                 has_changes = (stars > story.score)
 
-                if not story.status == Story.NEW and has_changes:
+                if story.status == Story.NEW:
+                    story.score = stars
+                elif has_changes:
                     update = StoryUpdate(story=story)
                     update.score_changes = stars - story.score
                     update.save()
-
-                story.score = stars
+                    story.score = stars                   
 
                 story.title = data.get('name')[1:]
 
