@@ -68,10 +68,6 @@ def main():
     HNSUpdateTopStories().start()
     HNSUpdateTodayStoriesData().start()
 
-    HNSIndexAllStories(number=0, total=3).start()
-    HNSIndexAllStories(number=1, total=3).start()
-    HNSIndexAllStories(number=2, total=3).start()
-
 
 if __name__ == '__main__':
     main()
