@@ -7,3 +7,4 @@ Unipath==1.1
 python-firebase==1.2
 requests==2.7.0
 beautifulsoup4==4.4.0
+Twisted==15.3.0
