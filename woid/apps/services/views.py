@@ -39,8 +39,8 @@ def all(request):
     services = Service.objects.all()
     for service in services:
         top_story = service.stories.filter(status=Story.OK, date__year=today.year, date__month=today.month, date__day=today.day).order_by('-score').first()
-        stories.append(top_story)
-    print stories
+        if top_story:
+            stories.append(top_story)
     subtitle = today.strftime('%d %b %Y')
     return render(request, 'services/all.html', { 'stories': stories, 'subtitle': subtitle })
 
