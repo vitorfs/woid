@@ -20,6 +20,13 @@ class Service(models.Model):
     def __unicode__(self):
         return self.name
 
+    def to_dict(self):
+        return { 
+            'name': self.name,
+            'slug': self.slug,
+            'url': self.url
+        }
+
 
 class Story(models.Model):
     TEXT = 'T'
@@ -74,6 +81,16 @@ class Story(models.Model):
     def get_template(self):
         template = u'services/includes/{0}_story.html'.format(self.service.slug)
         return template
+
+    def to_dict(self):
+        return {
+            'code': self.code, 
+            'title': self.title, 
+            'url': self.url, 
+            'comments': self.comments, 
+            'score': self.score, 
+            'description': self.description 
+        }
 
 
 class StoryUpdate(models.Model):

@@ -1,8 +1,10 @@
 # coding: utf-8
 
+import json
 from collections import OrderedDict
 from itertools import groupby
 
+from django.http import HttpResponse
 from django.db.models import Max
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
@@ -26,12 +28,21 @@ def stories(request, service, queryset, subtitle):
     else:
         start = 1
 
-    return render(request, 'services/stories.html', {
-        'service': service,
-        'stories': stories,
-        'subtitle': subtitle,
-        'start': start
-    })
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        stories_dict = map(lambda story: story.to_dict(), stories)
+        dump = json.dumps({ 
+            'service': service.to_dict(), 
+            'stories': stories_dict, 
+            'subtitle': subtitle 
+        })
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'services/stories.html', {
+            'service': service,
+            'stories': stories,
+            'subtitle': subtitle,
+            'start': start
+        })
 
 def all(request):
     today = timezone.now()
@@ -42,7 +53,16 @@ def all(request):
         if top_story:
             stories.append(top_story)
     subtitle = today.strftime('%d %b %Y')
-    return render(request, 'services/all.html', { 'stories': stories, 'subtitle': subtitle })
+
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        stories_dict = map(lambda story: story.to_dict(), stories)
+        dump = json.dumps({ 
+            'stories': stories_dict, 
+            'subtitle': subtitle 
+        })
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'services/all.html', { 'stories': stories, 'subtitle': subtitle })
 
 def index(request, slug):
     today = timezone.now()
@@ -85,7 +105,11 @@ def archive(request, slug):
             for day in days:
                 archive[year][month].append(day[8:10])
 
-    return render(request, 'services/archive.html', {
-        'service': service,
-        'archive': archive
-    })
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        dump = json.dumps(archive)
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'services/archive.html', {
+            'service': service,
+            'archive': archive
+        })
