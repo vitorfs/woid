@@ -2,6 +2,7 @@
 
 import logging
 import json
+import re
 
 from bs4 import BeautifulSoup
 import requests
@@ -78,10 +79,10 @@ class GithubClient(object):
                 repo_meta = repo_meta.text.split()
                 if len(repo_meta) == 8: # means we have the repo language
                     repo_data['language'] = repo_meta[0]
-                    repo_data['stars'] = int(repo_meta[2])
+                    repo_data['stars'] = int(re.sub(r'\D', '', repo_meta[2]))
                 elif len(repo_meta) == 6: # means we do not have repo language
                     repo_data['language'] = ''
-                    repo_data['stars'] = int(repo_meta[0])
+                    repo_data['stars'] = int(re.sub(r'\D', '', repo_meta[0]))
 
             data.append(repo_data)
         

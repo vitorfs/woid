@@ -22,15 +22,11 @@ FIVE_MINUTES = 5 * 60
 THIRTY_MINUTES = 30 * 60
 
 def main_loop():
-    print('updating reddit...')
     RedditCrawler().update_top_stories()
-    print('updating hacker news...')
     HackerNewsCrawler().update_top_stories()
-    print('updating medium...')
     MediumCrawler().update_top_stories()
 
 def lazy_loop():
-    print('updating github...')
     GithubCrawler().update_top_stories()
 
 def main():
