@@ -1,4 +1,5 @@
 {% load services_url %}
+
 <ul class="menu-stories">
   <li><a href="{% url 'services:index' service.slug %}">today</a></li>
   <li><a href="{% services_url slug=service.slug delta=1 %}">yesterday</a></li>
