@@ -27,12 +27,12 @@ def main_loop():
     crawlers.MediumCrawler().update_top_stories()
 
 def lazy_loop():
-    #crawlers.GithubCrawler().update_top_stories()
+    crawlers.GithubCrawler().update_top_stories()
     crawlers.NyTimesCrawler().update_top_stories()
 
 def main():
-    #main_loop_task = task.LoopingCall(main_loop)
-    #main_loop_task.start(FIVE_MINUTES)
+    main_loop_task = task.LoopingCall(main_loop)
+    main_loop_task.start(FIVE_MINUTES)
 
     main_loop_task = task.LoopingCall(lazy_loop)
     main_loop_task.start(THIRTY_MINUTES)
