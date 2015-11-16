@@ -8,6 +8,9 @@ from bs4 import BeautifulSoup
 import requests
 from firebase import firebase
 
+from django.conf import settings
+
+
 requests.packages.urllib3.disable_warnings()
 
 
@@ -98,3 +101,28 @@ class MediumClient(object):
         text_data = r.text[16:] # remove ])}while(1);</x>
         json_data = json.loads(text_data)
         return json_data['payload']['value']['posts']
+
+
+class NyTimesClient(object):
+    def __init__(self):
+        self.headers = { 'user-agent': 'woid/1.0' }
+
+    def get_most_popular_stories(self):
+        data = dict()
+
+        mostviewed_endpoint = 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?api-key={0}'.format(settings.NYTIMES_API_KEY)
+        r = requests.get(mostviewed_endpoint, headers=self.headers)
+        json_data = r.json()
+        data['mostviewed'] = json_data['results']
+
+        mostemailed_endpoint = 'http://api.nytimes.com/svc/mostpopular/v2/mostemailed/all-sections/1.json?api-key={0}'.format(settings.NYTIMES_API_KEY)
+        r = requests.get(mostemailed_endpoint, headers=self.headers)
+        json_data = r.json()
+        data['mostemailed'] = json_data['results']
+
+        mostshared_endpoint = 'http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key={0}'.format(settings.NYTIMES_API_KEY)
+        r = requests.get(mostshared_endpoint, headers=self.headers)
+        json_data = r.json()
+        data['mostshared'] = json_data['results']
+
+        return data

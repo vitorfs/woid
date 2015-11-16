@@ -115,3 +115,6 @@ LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/'
 
 TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
+
+NYTIMES_API_KEY = config('NYTIMES_API_KEY')
+

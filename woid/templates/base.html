@@ -31,12 +31,15 @@
 <body>
   <div class="wrapper">
     <header>
-      <a href="{% url 'home' %}">woid</a>
+      <a href="{% url 'front_page' %}">woid</a>
+      {% comment %}
       {% if user.is_authenticated %}
-        <nav><a href="{% url 'home' %}">{{ user.username }}</a> / <a href="{% url 'logout' %}">logout</a></nav>
+        <nav><a href="{% url 'front_page' %}">{{ user.username }}</a> / <a href="{% url 'logout' %}">logout</a></nav>
       {% else %}
         <nav><a href="{% url 'signup' %}">sign up</a> / <a href="{% url 'login' %}">login</a></nav>
       {% endif %}
+      {% endcomment %}
+      <nav>&nbsp;</nav>
     </header>
     <main>
     {% for message in messages %}
@@ -55,9 +58,12 @@
   </div>
   <footer>
     <a href="{% url 'about' %}">about</a>
+    <a href="https://github.com/vitorfs/woid/" target="_blank">github</a>
+    {% comment %}
     <a href="{% url 'cookies' %}">cookies</a>
     <a href="{% url 'privacy' %}">privacy</a>
     <a href="{% url 'terms' %}">terms</a>
+    {% endcomment %}
   </footer>
   <script src="{% static 'js/ga.js' %}"></script>
   <script src="{% static 'js/vendor/jquery-1.11.3.min.js' %}"></script>

@@ -5,13 +5,13 @@ import logging
 from django.utils import timezone
 
 from woid.apps.services.models import Service, Story, StoryUpdate
-from woid.apps.services.wrappers import HackerNewsClient, RedditClient, GithubClient, MediumClient
+from woid.apps.services import wrappers
 
 
 class HackerNewsCrawler(object):
     def __init__(self):
         self.service = Service.objects.get(slug='hackernews')
-        self.client = HackerNewsClient()
+        self.client = wrappers.HackerNewsClient()
 
     def update_top_stories(self):
         try:
@@ -73,7 +73,7 @@ class HackerNewsCrawler(object):
 class RedditCrawler(object):
     def __init__(self):
         self.service = Service.objects.get(slug='reddit')
-        self.client = RedditClient()
+        self.client = wrappers.RedditClient()
 
     def update_top_stories(self):
         try:
@@ -109,7 +109,7 @@ class RedditCrawler(object):
 class GithubCrawler(object):
     def __init__(self):
         self.service = Service.objects.get(slug='github')
-        self.client = GithubClient()
+        self.client = wrappers.GithubClient()
 
     def update_top_stories(self):
         try:
@@ -159,7 +159,7 @@ class GithubCrawler(object):
 class MediumCrawler(object):
     def __init__(self):
         self.service = Service.objects.get(slug='medium')
-        self.client = MediumClient()
+        self.client = wrappers.MediumClient()
 
     def update_top_stories(self):
         try:
@@ -190,6 +190,68 @@ class MediumCrawler(object):
 
                 story.status = Story.OK
                 story.save()
+
+        except Exception, e:
+            logging.error(e)
+
+
+class NyTimesCrawler(object):
+    def __init__(self):
+        self.service = Service.objects.get(slug='nytimes')
+        self.client = wrappers.NyTimesClient()
+
+    def save_story(self, story_data, score, weight):
+        story_id = story_data.get('id', story_data.get('asset_id', None))
+        if not story_id:
+            return
+
+        today = timezone.now()
+        story, created = Story.objects.get_or_create(
+                service=self.service,
+                code=story_id,
+                date=timezone.datetime(today.year, today.month, today.day, tzinfo=timezone.get_current_timezone())
+            )
+
+        story.title = story_data['title']
+        story.url = story_data['url']
+
+        minutes_since_last_update = 0
+
+        if story.updates.exists():
+            last_update = story.updates.order_by('-updated_at').first()
+            delta = timezone.now() - last_update.updated_at
+            minutes_since_last_update = delta.total_seconds() / 60
+
+        if created or minutes_since_last_update >= 30:
+            score_run = score * weight
+            story.score += score_run
+
+            update = StoryUpdate(story=story)
+            update.score_changes = score_run
+            update.save()
+
+        story.status = Story.OK
+        story.save()
+
+    def update_top_stories(self):
+        try:
+            popular_stories = self.client.get_most_popular_stories()
+            today = timezone.now()
+
+            score = 20
+            for story_data in popular_stories['mostviewed']:
+                self.save_story(story_data, score, 4)
+                score -= 1
+
+            score = 20
+            for story_data in popular_stories['mostshared']:
+                self.save_story(story_data, score, 2)
+                score -= 1
+
+            score = 20
+            for story_data in popular_stories['mostemailed']:
+                self.save_story(story_data, score, 1)
+                score -= 1
 
         except Exception, e:
             logging.error(e)

@@ -3,8 +3,8 @@
     "model": "services.Service",
     "pk": 1,
     "fields": {
-      "name": "hacker news",
-      "slug": "hackernews",
+      "name": "Hacker News",
+      "slug": "hn",
       "url": "https://news.ycombinator.com/news",
       "story_url": "https://news.ycombinator.com/item?id="
     }
@@ -13,7 +13,7 @@
     "model": "services.Service",
     "pk": 2,
     "fields": {
-      "name": "reddit",
+      "name": "Reddit",
       "slug": "reddit",
       "url": "https://www.reddit.com",
       "story_url": "https://www.reddit.com"
@@ -23,7 +23,7 @@
     "model": "services.Service",
     "pk": 3,
     "fields": {
-      "name": "github",
+      "name": "GitHub",
       "slug": "github",
       "url": "https://github.com/trending",
       "story_url": "https://github.com"
@@ -33,10 +33,20 @@
     "model": "services.Service",
     "pk": 4,
     "fields": {
-      "name": "medium",
+      "name": "Medium",
       "slug": "medium",
       "url": "https://medium.com/top-stories",
       "story_url": "https://medium.com"
+    }
+  },
+  {
+    "model": "services.Service",
+    "pk": 5,
+    "fields": {
+      "name": "New York Times",
+      "slug": "nytimes",
+      "url": "http://www.nytimes.com/most-popular-viewed",
+      "story_url": "http://nytimes.com"
     }
   }
 ]

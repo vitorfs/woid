@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 
 from woid.apps.services.models import Service, Story
+from woid.apps.services.utils import remove_duplicates
 
 
 def stories(request, service, queryset, subtitle):
@@ -44,7 +45,7 @@ def stories(request, service, queryset, subtitle):
             'start': start
         })
 
-def all(request):
+def front_page(request):
     today = timezone.now()
     stories = list()
     services = Service.objects.all()
@@ -62,7 +63,7 @@ def all(request):
         })
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'services/all.html', { 'stories': stories, 'subtitle': subtitle })
+        return render(request, 'services/front_page.html', { 'stories': stories, 'subtitle': subtitle })
 
 def index(request, slug):
     today = timezone.now()
@@ -84,11 +85,6 @@ def day(request, slug, year, month, day):
     queryset = service.stories.filter(status=Story.OK, date__year=year, date__month=month, date__day=day)[:10]
     subtitle = timezone.datetime(int(year), int(month), int(day)).strftime('%d %b %Y')
     return stories(request, service, queryset, subtitle)
-
-def remove_duplicates(seq):
-    seen = set()
-    seen_add = seen.add
-    return [x for x in seq if not (x in seen or seen_add(x))]
 
 def archive(request, slug):
     service = get_object_or_404(Service, slug=slug)

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load static %}
 
 {% block javascript %}
   <script src="{% static 'js/services/stories.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-  <h2>all <small>({{ subtitle }})</small></h2>
+  <h2>front page <small>({{ subtitle }})</small></h2>
   <ul class="stories">
     {% for story in stories %}
       {% include story.get_template with append_service=True %}
