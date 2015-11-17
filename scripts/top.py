@@ -25,6 +25,7 @@ def main_loop():
     crawlers.RedditCrawler().update_top_stories()
     crawlers.HackerNewsCrawler().update_top_stories()
     crawlers.MediumCrawler().update_top_stories()
+    crawlers.DiggCrawler().update_top_stories()
 
 def lazy_loop():
     crawlers.GithubCrawler().update_top_stories()

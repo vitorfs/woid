@@ -14,6 +14,11 @@ from django.conf import settings
 requests.packages.urllib3.disable_warnings()
 
 
+class AbstractBaseClient(object):
+    def __init__(self):
+        self.headers = { 'user-agent': 'woid/1.0' }
+
+
 class HackerNewsClient(object):
     def __init__(self):
         self.firebase_app = firebase.FirebaseApplication('https://hacker-news.firebaseio.com', None)
@@ -31,9 +36,7 @@ class HackerNewsClient(object):
         return result
 
 
-class RedditClient(object):
-    def __init__(self):
-        self.headers = { 'user-agent': 'woid/1.0' }
+class RedditClient(AbstractBaseClient):
 
     def get_front_page_stories(self):
         r = None
@@ -56,9 +59,7 @@ class RedditClient(object):
         return stories
 
 
-class GithubClient(object):
-    def __init__(self):
-        self.headers = { 'user-agent': 'woid/1.0' }
+class GithubClient(AbstractBaseClient):
 
     def get_today_trending_repositories(self):
         r = requests.get('https://github.com/trending', headers=self.headers)
@@ -92,9 +93,7 @@ class GithubClient(object):
         return data
 
 
-class MediumClient(object):
-    def __init__(self):
-        self.headers = { 'user-agent': 'woid/1.0' }
+class MediumClient(AbstractBaseClient):
 
     def get_top_stories(self):
         r = requests.get('https://medium.com/top-stories?format=json', headers=self.headers)
@@ -103,9 +102,7 @@ class MediumClient(object):
         return json_data['payload']['value']['posts']
 
 
-class NyTimesClient(object):
-    def __init__(self):
-        self.headers = { 'user-agent': 'woid/1.0' }
+class NyTimesClient(AbstractBaseClient):
 
     def get_most_popular_stories(self):
         data = dict()
@@ -124,5 +121,28 @@ class NyTimesClient(object):
         r = requests.get(mostshared_endpoint, headers=self.headers)
         json_data = r.json()
         data['mostshared'] = json_data['results']
+
+        return data
+
+class DiggClient(AbstractBaseClient):
+
+    def get_top_stories(self):
+        r = requests.get('http://digg.com/', headers=self.headers)
+        html = r.text
+        soup = BeautifulSoup(html, 'html.parser')
+        diggs = soup(attrs={ 'class': 'digg-story' })
+        
+        data = list()
+        for digg in diggs:
+            story_data = dict()
+            title = digg.find(attrs={ 'class': 'entry-title' })
+            story_data['title'] = title.text.strip()
+            try:
+                story_data['score'] = int(re.sub(r'\D', '', digg['data-digg-score']))
+            except:
+                story_data['score'] = 0
+            story_data['id'] = digg['data-content-id']
+            story_data['url'] = digg['data-contenturl']
+            data.append(story_data)
 
         return data

@@ -48,5 +48,15 @@
       "url": "http://www.nytimes.com/most-popular-viewed",
       "story_url": "http://nytimes.com"
     }
+  },
+  {
+    "model": "services.Service",
+    "pk": 6,
+    "fields": {
+      "name": "Digg",
+      "slug": "digg",
+      "url": "http://www.digg.com",
+      "story_url": "http://digg.com"
+    }
   }
 ]
