@@ -10,7 +10,7 @@ from woid.apps.services import wrappers
 
 class HackerNewsCrawler(object):
     def __init__(self):
-        self.service = Service.objects.get(slug='hackernews')
+        self.service = Service.objects.get(slug='hn')
         self.client = wrappers.HackerNewsClient()
 
     def update_top_stories(self):
