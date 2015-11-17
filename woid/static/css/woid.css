@@ -732,6 +732,11 @@ main h2 small {
   color: #cc6257;
 }
 
+.calendar .months {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
 .calendar .month {
   width: 25%;
   float: left;

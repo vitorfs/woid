@@ -15,11 +15,13 @@
   {% for year, months in archive.iteritems %}
     <div class="calendar cf">
       <h3><a href="{% url 'services:year' service.slug year %}">{{ year }}</a></h3>
-      {% for month, days in months.iteritems %}
-        <div class="month">
-          {% month_calendar year month days service %}
-        </div>
-      {% endfor %}
+      <div class="months cf">
+        {% for month, days in months.iteritems %}
+          <div class="month">
+            {% month_calendar year month days service %}
+          </div>
+        {% endfor %}
+      </div>
     </div>
   {% endfor %}
 
