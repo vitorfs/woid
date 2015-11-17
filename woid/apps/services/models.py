@@ -27,6 +27,7 @@ class Service(models.Model):
     class Meta:
         verbose_name = 'service'
         verbose_name_plural = 'services'
+        ordering = ('name',)
 
     def __unicode__(self):
         return self.name

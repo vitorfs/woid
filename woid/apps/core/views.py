@@ -6,5 +6,5 @@ from woid.apps.services.models import Service
 
 
 def status(request):
-    services = Service.objects.order_by('name')
+    services = Service.objects.all()
     return render(request, 'core/status.html', { 'services': services })
