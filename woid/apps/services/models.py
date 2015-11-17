@@ -6,10 +6,21 @@ from woid.apps.services.managers import ServiceManager, StoryManager
 
 
 class Service(models.Model):
+    GOOD = 'G'
+    ERROR = 'E'
+    CRAWLING = 'C'
+    CURRENT_STATUS = (
+        (GOOD, u'✓ good'),
+        (ERROR, u'× error'),
+        (CRAWLING, u'~ running')
+        )
+
     name = models.CharField(max_length=255)
     slug = models.SlugField()
     url = models.URLField()
     story_url = models.URLField()
+    last_run = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=1, default=GOOD, choices=CURRENT_STATUS)
 
     objects = ServiceManager()
 

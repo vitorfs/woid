@@ -771,3 +771,14 @@ main h2 small {
 .cf {
   *zoom: 1;
 }
+
+.status {
+  margin-bottom: 20px;
+}
+
+.status thead tr th,
+.status tbody tr td {
+  text-align: left;
+  border: 1px solid #eee;
+  padding: 5px 10px;
+}

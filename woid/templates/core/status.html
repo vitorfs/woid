@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block title %}Status · Woid{% endblock %}
+
+{% block content %}
+  <h2>status</h2>
+
+  <table class="status">
+    <thead>
+      <tr>
+        <th>service</th>
+        <th>status</th>
+        <th>last update</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for service in services %}
+      <tr>
+        <td>{{ service.slug }}</td>
+        <td>{{ service.get_status_display }}</td>
+        <td>
+          {% if service.status == 'C' %}
+          ~
+          {% else %}
+            {{ service.last_run|naturaltime }}
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+{% endblock %}
