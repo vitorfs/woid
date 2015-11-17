@@ -8,10 +8,26 @@ from woid.apps.services.models import Service, Story, StoryUpdate
 from woid.apps.services import wrappers
 
 
-class HackerNewsCrawler(object):
+class AbstractBaseCrawler(object):
+    def __init__(self, slug, client):
+        self.service = Service.objects.get(slug=slug)
+        self.client = client
+
+    def run(self):
+        try:
+            self.service.status = Service.CRAWLING
+            self.service.last_run = timezone.now()
+            self.service.save()
+            self.update_top_stories()
+            self.service.status = Service.GOOD
+            self.service.save()
+        except Exception, e:
+            self.service.status = Service.ERROR
+            self.service.save()
+
+class HackerNewsCrawler(AbstractBaseCrawler):
     def __init__(self):
-        self.service = Service.objects.get(slug='hn')
-        self.client = wrappers.HackerNewsClient()
+        super(HackerNewsCrawler, self).__init__('hn', wrappers.HackerNewsClient())
 
     def update_top_stories(self):
         try:
@@ -70,10 +86,9 @@ class HackerNewsCrawler(object):
             logging.error(e)
 
 
-class RedditCrawler(object):
+class RedditCrawler(AbstractBaseCrawler):
     def __init__(self):
-        self.service = Service.objects.get(slug='reddit')
-        self.client = wrappers.RedditClient()
+        super(RedditCrawler, self).__init__('reddit', wrappers.RedditClient())
 
     def update_top_stories(self):
         try:
@@ -106,10 +121,9 @@ class RedditCrawler(object):
             logging.error(e)
 
 
-class GithubCrawler(object):
+class GithubCrawler(AbstractBaseCrawler):
     def __init__(self):
-        self.service = Service.objects.get(slug='github')
-        self.client = wrappers.GithubClient()
+        super(GithubCrawler, self).__init__('github', wrappers.GithubClient())
 
     def update_top_stories(self):
         try:
@@ -156,10 +170,9 @@ class GithubCrawler(object):
             logging.error(e)
 
 
-class MediumCrawler(object):
+class MediumCrawler(AbstractBaseCrawler):
     def __init__(self):
-        self.service = Service.objects.get(slug='medium')
-        self.client = wrappers.MediumClient()
+        super(MediumCrawler, self).__init__('medium', wrappers.MediumClient())
 
     def update_top_stories(self):
         try:
@@ -195,10 +208,9 @@ class MediumCrawler(object):
             logging.error(e)
 
 
-class NyTimesCrawler(object):
+class NyTimesCrawler(AbstractBaseCrawler):
     def __init__(self):
-        self.service = Service.objects.get(slug='nytimes')
-        self.client = wrappers.NyTimesClient()
+        super(NyTimesCrawler, self).__init__('nytimes', wrappers.NyTimesClient())
 
     def save_story(self, story_data, score, weight):
         story_id = story_data.get('id', story_data.get('asset_id', None))
@@ -257,10 +269,9 @@ class NyTimesCrawler(object):
             logging.error(e)
 
 
-class DiggCrawler(object):
+class DiggCrawler(AbstractBaseCrawler):
     def __init__(self):
-        self.service = Service.objects.get(slug='digg')
-        self.client = wrappers.DiggClient()
+        super(DiggCrawler, self).__init__('digg', wrappers.DiggClient())
 
     def update_top_stories(self):
         try:
@@ -275,7 +286,7 @@ class DiggCrawler(object):
                     )
 
                 score = story_data['score']
-                has_changes = (score != story.score)
+                has_changes = (score > story.score)
                 if not story.status == Story.NEW and has_changes:
                     update = StoryUpdate(story=story)
                     update.score_changes = score - story.score
