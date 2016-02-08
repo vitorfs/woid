@@ -11,6 +11,7 @@ from woid.apps.services import wrappers
 class AbstractBaseCrawler(object):
     def __init__(self, slug, client):
         self.service = Service.objects.get(slug=slug)
+        self.slug = slug
         self.client = client
 
     def run(self):
@@ -21,9 +22,13 @@ class AbstractBaseCrawler(object):
             self.update_top_stories()
             self.service.status = Service.GOOD
             self.service.save()
-        except Exception, e:
-            self.service.status = Service.ERROR
-            self.service.save()
+        except:
+            try:
+                service = Service.objects.get(slug=self.slug)
+                service.status = Service.ERROR
+                service.save()
+            except:
+                pass
 
 class HackerNewsCrawler(AbstractBaseCrawler):
     def __init__(self):
