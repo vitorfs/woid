@@ -33,7 +33,7 @@ class Service(models.Model):
         return self.name
 
     def to_dict(self):
-        return { 
+        return {
             'name': self.name,
             'slug': self.slug,
             'url': self.url
@@ -69,7 +69,7 @@ class Story(models.Model):
     comments = models.IntegerField(default=0)
     start_score = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True, db_index=True)
     status = models.CharField(max_length=1, default=NEW, choices=STATUS)
     top_ten = models.BooleanField(default=False)
     nsfw = models.BooleanField(default=False)
@@ -96,12 +96,12 @@ class Story(models.Model):
 
     def to_dict(self):
         return {
-            'code': self.code, 
-            'title': self.title, 
-            'url': self.url, 
-            'comments': self.comments, 
-            'score': self.score, 
-            'description': self.description 
+            'code': self.code,
+            'title': self.title,
+            'url': self.url,
+            'comments': self.comments,
+            'score': self.score,
+            'description': self.description
         }
 
 
