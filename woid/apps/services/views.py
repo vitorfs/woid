@@ -3,6 +3,7 @@
 import json
 from collections import OrderedDict
 from itertools import groupby
+import datetime
 
 from django.http import HttpResponse
 from django.db.models import Max
@@ -81,8 +82,9 @@ def month(request, slug, year, month):
     return stories(request, service, queryset, subtitle)
 
 def day(request, slug, year, month, day):
+    date = datetime.datetime(year, month, day)
     service = get_object_or_404(Service, slug=slug)
-    queryset = service.stories.filter(status=Story.OK, date__year=year, date__month=month, date__day=day)[:10]
+    queryset = service.stories.filter(status=Story.OK, date=date)[:10]
     subtitle = timezone.datetime(int(year), int(month), int(day)).strftime('%d %b %Y')
     return stories(request, service, queryset, subtitle)
 
