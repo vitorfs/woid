@@ -31,10 +31,10 @@ def stories(request, service, queryset, subtitle):
 
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         stories_dict = map(lambda story: story.to_dict(), stories)
-        dump = json.dumps({ 
-            'service': service.to_dict(), 
-            'stories': stories_dict, 
-            'subtitle': subtitle 
+        dump = json.dumps({
+            'service': service.to_dict(),
+            'stories': stories_dict,
+            'subtitle': subtitle
         })
         return HttpResponse(dump, content_type='application/json')
     else:
@@ -50,16 +50,16 @@ def front_page(request):
     stories = list()
     services = Service.objects.all()
     for service in services:
-        top_story = service.stories.filter(status=Story.OK, date__year=today.year, date__month=today.month, date__day=today.day).order_by('-score').first()
+        top_story = service.stories.filter(status=Story.OK, date=today).order_by('-score').first()
         if top_story:
             stories.append(top_story)
     subtitle = today.strftime('%d %b %Y')
 
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         stories_dict = map(lambda story: story.to_dict(), stories)
-        dump = json.dumps({ 
-            'stories': stories_dict, 
-            'subtitle': subtitle 
+        dump = json.dumps({
+            'stories': stories_dict,
+            'subtitle': subtitle
         })
         return HttpResponse(dump, content_type='application/json')
     else:
