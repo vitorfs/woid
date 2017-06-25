@@ -59,17 +59,18 @@ class HackerNewsCrawler(AbstractBaseCrawler):
                 if story.status == Story.NEW:
                     story.date = timezone.datetime.fromtimestamp(story_data.get('time'), timezone.get_current_timezone())
                     story.url = u'{0}{1}'.format(story.service.story_url, story.code)
-                
+
                 score = story_data.get('score', 0)
                 comments = story_data.get('descendants', 0)
                 has_changes = (score != story.score or comments != story.comments)
 
+                '''
                 if not story.status == Story.NEW and has_changes:
                     update = StoryUpdate(story=story)
                     update.comments_changes = comments - story.comments
                     update.score_changes = score - story.score
                     update.save()
-
+                '''
                 story.comments = comments
                 story.score = score
                 story.title = story_data.get('title', '')
@@ -109,11 +110,13 @@ class RedditCrawler(AbstractBaseCrawler):
                 comments = story_data.get('num_comments', 0)
                 has_changes = (score != story.score or comments != story.comments)
 
+                '''
                 if not story.status == Story.NEW and has_changes:
                     update = StoryUpdate(story=story)
                     update.comments_changes = comments - story.comments
                     update.score_changes = score - story.score
                     update.save()
+                '''
 
                 story.comments = comments
                 story.score = score
@@ -151,10 +154,12 @@ class GithubCrawler(AbstractBaseCrawler):
                 if story.status == Story.NEW:
                     story.score = stars
                 elif has_changes:
+                    '''
                     update = StoryUpdate(story=story)
                     update.score_changes = stars - story.score
                     update.save()
-                    story.score = stars                   
+                    '''
+                    story.score = stars
 
                 story.title = data.get('name')[1:]
 
@@ -190,18 +195,20 @@ class MediumCrawler(AbstractBaseCrawler):
                     story.url = u'{0}/@{1}/{2}'.format(self.service.story_url, post_data['creator']['username'], post_data['id'])
                     story.start_score = int(post_data['virtuals']['recommends'])
                     story.start_comments = int(post_data['virtuals']['responsesCreatedCount'])
-                
+
                 story.title = post_data['title']
 
                 recommends = int(post_data['virtuals']['recommends']) - story.start_score
                 comments = int(post_data['virtuals']['responsesCreatedCount']) - story.start_comments
                 has_changes = (recommends != story.score or comments != story.comments)
 
+                '''
                 if not story.status == Story.NEW and has_changes:
                     update = StoryUpdate(story=story)
                     update.comments_changes = comments - story.comments
                     update.score_changes = recommends - story.score
                     update.save()
+                '''
 
                 story.score = recommends
                 story.comments = comments
@@ -243,9 +250,11 @@ class NyTimesCrawler(AbstractBaseCrawler):
             score_run = score * weight
             story.score += score_run
 
+            '''
             update = StoryUpdate(story=story)
             update.score_changes = score_run
             update.save()
+            '''
 
         story.status = Story.OK
         story.save()
