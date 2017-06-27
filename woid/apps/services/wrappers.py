@@ -41,7 +41,7 @@ class RedditClient(AbstractBaseClient):
     def get_front_page_stories(self):
         r = None
         stories = list()
-        
+
         try:
             r = requests.get('https://www.reddit.com/.json', headers=self.headers)
             result = r.json()
@@ -65,31 +65,30 @@ class GithubClient(AbstractBaseClient):
         r = requests.get('https://github.com/trending', headers=self.headers)
         html = r.text
         soup = BeautifulSoup(html, 'html.parser')
-        repos = soup(attrs={ 'class': 'repo-list-item' })
+        repos = soup.select('ol.repo-list li')
         data = list()
         for repo in repos:
             repo_data = dict()
             repo_data['name'] = repo.h3.a.get('href')
 
-            description = repo.find(attrs={'class': 'repo-list-description'})
+            description = repo.p.text
             if description:
-                description = description.text.strip()
+                description = description.strip()
             else:
                 description = ''
             repo_data['description'] = description
 
-            repo_meta = repo.find(attrs={'class': 'repo-list-meta'})
-            if repo_meta:
-                repo_meta = repo_meta.text.split()
-                if len(repo_meta) == 8: # means we have the repo language
-                    repo_data['language'] = repo_meta[0]
-                    repo_data['stars'] = int(re.sub(r'\D', '', repo_meta[2]))
-                elif len(repo_meta) == 6: # means we do not have repo language
-                    repo_data['language'] = ''
-                    repo_data['stars'] = int(re.sub(r'\D', '', repo_meta[0]))
+            lang = repo.find(attrs={'itemprop': 'programmingLanguage'})
+            if lang:
+                repo_data['language'] = lang.text.strip()
+            else:
+                repo_data['language'] = ''
+
+            star = repo.find(attrs={'href': u'{}/stargazers'.format(name)})
+            repo_data['stars'] = int(re.sub(r'\D', '', star.text))
 
             data.append(repo_data)
-        
+
         return data
 
 
@@ -131,7 +130,7 @@ class DiggClient(AbstractBaseClient):
         html = r.text
         soup = BeautifulSoup(html, 'html.parser')
         diggs = soup(attrs={ 'class': 'digg-story' })
-        
+
         data = list()
         for digg in diggs:
             story_data = dict()
