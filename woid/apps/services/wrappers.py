@@ -84,7 +84,7 @@ class GithubClient(AbstractBaseClient):
             else:
                 repo_data['language'] = ''
 
-            star = repo.find(attrs={'href': u'{}/stargazers'.format(name)})
+            star = repo.find(attrs={'href': u'{}/stargazers'.format(repo_data['name'])})
             repo_data['stars'] = int(re.sub(r'\D', '', star.text))
 
             data.append(repo_data)
