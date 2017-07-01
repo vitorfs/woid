@@ -438,7 +438,7 @@ th {
           box-sizing: border-box;
 }
 
-html, 
+html,
 body {
   height: 100%;
 }
@@ -475,7 +475,7 @@ header > a {
   font-weight: 700;
   text-decoration: none;
   margin-right: 20px;
-  font-size: 16px;  
+  font-size: 16px;
 }
 
 header nav {
@@ -538,8 +538,8 @@ ul.paginator li {
   display: inline;
 }
 
-h1, 
-h2, 
+h1,
+h2,
 h3 {
   font-weight: 500;
 }
@@ -741,6 +741,7 @@ main h2 small {
   width: 25%;
   float: left;
   padding: 10px;
+  height: 190px;
 }
 
 @media (max-width: 768px) {
