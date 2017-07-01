@@ -62,7 +62,7 @@ class RedditClient(AbstractBaseClient):
 class GithubClient(AbstractBaseClient):
 
     def get_today_trending_repositories(self):
-        r = requests.get('https://github.com/trending', headers=self.headers)
+        r = requests.get('https://github.com/trending?since=daily', headers=self.headers)
         html = r.text
         soup = BeautifulSoup(html, 'html.parser')
         repos = soup.select('ol.repo-list li')
