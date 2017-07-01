@@ -250,11 +250,9 @@ class NyTimesCrawler(AbstractBaseCrawler):
             score_run = score * weight
             story.score += score_run
 
-            '''
             update = StoryUpdate(story=story)
             update.score_changes = score_run
             update.save()
-            '''
 
         story.status = Story.OK
         story.save()
