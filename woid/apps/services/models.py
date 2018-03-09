@@ -2,8 +2,6 @@
 
 from django.db import models
 
-from woid.apps.services.managers import ServiceManager, StoryManager
-
 
 class Service(models.Model):
     GOOD = 'G'
@@ -22,7 +20,6 @@ class Service(models.Model):
     last_run = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=1, default=GOOD, choices=CURRENT_STATUS)
 
-    objects = ServiceManager()
 
     class Meta:
         verbose_name = 'service'
@@ -75,7 +72,6 @@ class Story(models.Model):
     nsfw = models.BooleanField(default=False)
     description = models.CharField(max_length=2000, null=True, blank=True)
 
-    objects = StoryManager()
 
     class Meta:
         verbose_name = 'story'

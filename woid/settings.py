@@ -32,7 +32,6 @@ MESSAGE_LEVEL = config('MESSAGE_LEVEL', default=message_constants.INFO, cast=int
 
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -81,7 +80,6 @@ DATABASES = {
     'default': dj_database_url.config(
       default = config('DATABASE_URL'))
 }
-
 
 
 LANGUAGE_CODE = 'en-us'

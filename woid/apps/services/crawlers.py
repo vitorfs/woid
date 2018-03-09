@@ -279,36 +279,3 @@ class NyTimesCrawler(AbstractBaseCrawler):
 
         except Exception, e:
             logging.error(e)
-
-
-class DiggCrawler(AbstractBaseCrawler):
-    def __init__(self):
-        super(DiggCrawler, self).__init__('digg', wrappers.DiggClient())
-
-    def update_top_stories(self):
-        try:
-            popular_stories = self.client.get_top_stories()
-            today = timezone.now()
-
-            for story_data in popular_stories:
-                story, created = Story.objects.get_or_create(
-                        service=self.service,
-                        code=story_data['id'],
-                        date=timezone.datetime(today.year, today.month, today.day, tzinfo=timezone.get_current_timezone())
-                    )
-
-                score = story_data['score']
-                has_changes = (score > story.score)
-                if not story.status == Story.NEW and has_changes:
-                    update = StoryUpdate(story=story)
-                    update.score_changes = score - story.score
-                    update.save()
-
-                story.title = story_data['title']
-                story.url = story_data['url']
-                story.score = score
-                story.status = Story.OK
-                story.save()
-
-        except Exception, e:
-            logging.error(e)

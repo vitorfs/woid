@@ -123,26 +123,3 @@ class NyTimesClient(AbstractBaseClient):
         data['mostshared'] = json_data['results']
 
         return data
-
-class DiggClient(AbstractBaseClient):
-
-    def get_top_stories(self):
-        r = requests.get('http://digg.com/', headers=self.headers)
-        html = r.text
-        soup = BeautifulSoup(html, 'html.parser')
-        diggs = soup(attrs={ 'class': 'digg-story' })
-
-        data = list()
-        for digg in diggs:
-            story_data = dict()
-            title = digg.find(attrs={ 'class': 'entry-title' })
-            story_data['title'] = title.text.strip()
-            try:
-                story_data['score'] = int(re.sub(r'\D', '', digg['data-digg-score']))
-            except:
-                story_data['score'] = 0
-            story_data['id'] = digg['data-content-id']
-            story_data['url'] = digg['data-contenturl']
-            data.append(story_data)
-
-        return data

@@ -27,11 +27,10 @@ def main():
     service_crawlers = (
         (crawlers.RedditCrawler(), FIVE_MINUTES),
         (crawlers.MediumCrawler(), FIVE_MINUTES),
-        (crawlers.DiggCrawler(), FIVE_MINUTES),
         (crawlers.HackerNewsCrawler(), FIVE_MINUTES),
         (crawlers.GithubCrawler(), THIRTY_MINUTES),
         (crawlers.NyTimesCrawler(), THIRTY_MINUTES)
-        )
+    )
 
     for crawler in service_crawlers:
         task.LoopingCall(crawler[0].run).start(crawler[1])

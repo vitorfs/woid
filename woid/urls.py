@@ -1,10 +1,10 @@
 # coding: utf-8
 
 from django.conf.urls import patterns, include, url
-from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
+
 
 urlpatterns = patterns('',
     url(r'^$', 'woid.apps.services.views.front_page', name='front_page'),
@@ -17,5 +17,4 @@ urlpatterns = patterns('',
     url(r'^privacy/', TemplateView.as_view(template_name='core/privacy.html'), name='privacy'),
     url(r'^terms/', TemplateView.as_view(template_name='core/terms.html'), name='terms'),
     url(r'^(?P<slug>[-_\w]+)/', include('woid.apps.services.urls', namespace='services')),
-    url(r'^admin/', include(admin.site.urls)),
 )
