@@ -9,6 +9,7 @@ import requests
 from firebase import firebase
 
 from django.conf import settings
+from django.utils import timezone
 
 
 requests.packages.urllib3.disable_warnings()
@@ -117,3 +118,21 @@ class NyTimesClient(AbstractBaseClient):
         data['mostshared'] = json_data['results']
 
         return data
+
+
+class ProductHuntClient(AbstractBaseClient):
+    def __init__(self):
+        super(ProductHuntClient, self).__init__()
+        extra_headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer %s' % settings.PRODUCT_HUNT_TOKEN,
+            'Host': 'api.producthunt.com'
+        }
+        self.headers.update(extra_headers)
+
+    def get_top_posts(self):
+        today = timezone.now().strftime('%Y-%m-%d')
+        r = requests.get('https://api.producthunt.com/v1/posts?day=%s' % today, headers=self.headers)
+        data = r.json()
+        return data['posts']

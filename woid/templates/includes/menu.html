@@ -7,4 +7,5 @@
   <li><a href="{% url 'services:index' 'github' %}"{% if request.path|startswith:'/github/' %} class="active"{% endif %}>github</a></li>
   <li><a href="{% url 'services:index' 'medium' %}"{% if request.path|startswith:'/medium/' %} class="active"{% endif %}>medium</a></li>
   <li><a href="{% url 'services:index' 'nytimes' %}"{% if request.path|startswith:'/nytimes/' %} class="active"{% endif %}>nytimes</a></li>
+  <li><a href="{% url 'services:index' 'producthunt' %}"{% if request.path|startswith:'/producthunt/' %} class="active"{% endif %}>product hunt</a></li>
 </ul>

@@ -53,10 +53,10 @@
     "model": "services.Service",
     "pk": 6,
     "fields": {
-      "name": "Digg",
-      "slug": "digg",
-      "url": "http://www.digg.com",
-      "story_url": "http://digg.com"
+      "name": "Product Hunt",
+      "slug": "producthunt",
+      "url": "https://www.producthunt.com",
+      "story_url": "https://www.producthunt.com/posts/"
     }
   }
 ]

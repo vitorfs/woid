@@ -20,7 +20,6 @@ class Service(models.Model):
     last_run = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=1, default=GOOD, choices=CURRENT_STATUS)
 
-
     class Meta:
         verbose_name = 'service'
         verbose_name_plural = 'services'
@@ -71,7 +70,6 @@ class Story(models.Model):
     top_ten = models.BooleanField(default=False)
     nsfw = models.BooleanField(default=False)
     description = models.CharField(max_length=2000, null=True, blank=True)
-
 
     class Meta:
         verbose_name = 'story'

@@ -279,3 +279,33 @@ class NyTimesCrawler(AbstractBaseCrawler):
 
         except Exception, e:
             logging.error(e)
+
+
+class ProductHuntCrawler(AbstractBaseCrawler):
+    def __init__(self):
+        super(ProductHuntCrawler, self).__init__('producthunt', wrappers.ProductHuntClient())
+
+    def update_top_stories(self):
+        try:
+            posts = self.client.get_top_posts()
+            today = timezone.now()
+            for post in posts:
+                code = post['slug']
+                story, created = Story.objects.get_or_create(
+                    service=self.service,
+                    code=code,
+                    date=timezone.datetime(today.year, today.month, today.day, tzinfo=timezone.get_current_timezone())
+                )
+
+                if created:
+                    story.title = post['name']
+                    story.description = post['tagline']
+                    story.url = u'{0}{1}'.format(self.service.story_url, code)
+
+                story.score = post['votes_count']
+                story.comments = post['comments_count']
+                story.status = Story.OK
+                story.save()
+
+        except Exception, e:
+            logging.error(e)
