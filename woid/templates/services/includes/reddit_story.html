@@ -1,5 +1,5 @@
 <li>
-  <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
+  <a href="{{ story.url }}" target="_blank" rel="nofollow noopener">{{ story.title }}</a>
   {% if story.nsfw %}
     <small class="nsfw">[nsfw]</small>
   {% endif %}
@@ -7,7 +7,7 @@
     <small><strong>{{ story.service.name }}</strong></small>
   {% endif %}
   <p>
-    {{ story.score }} upvote{{ story.score|pluralize }} 
+    {{ story.score }} upvote{{ story.score|pluralize }}
     &bullet;
     {{ story.comments }} comment{{ story.comments|pluralize }}
     &bullet;
