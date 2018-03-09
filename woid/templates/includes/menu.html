@@ -2,10 +2,7 @@
 
 <ul class="menu-services">
   <li><a href="{% url 'front_page' %}"{% if request.path = '/' %} class="active"{% endif %}>front page</a></li>
-  <li><a href="{% url 'services:index' 'hn' %}"{% if request.path|startswith:'/hn/' %} class="active"{% endif %}>hn</a></li>
-  <li><a href="{% url 'services:index' 'reddit' %}"{% if request.path|startswith:'/reddit/' %} class="active"{% endif %}>reddit</a></li>
-  <li><a href="{% url 'services:index' 'github' %}"{% if request.path|startswith:'/github/' %} class="active"{% endif %}>github</a></li>
-  <li><a href="{% url 'services:index' 'medium' %}"{% if request.path|startswith:'/medium/' %} class="active"{% endif %}>medium</a></li>
-  <li><a href="{% url 'services:index' 'nytimes' %}"{% if request.path|startswith:'/nytimes/' %} class="active"{% endif %}>nytimes</a></li>
-  <li><a href="{% url 'services:index' 'producthunt' %}"{% if request.path|startswith:'/producthunt/' %} class="active"{% endif %}>product hunt</a></li>
+  {% for slug in services_slugs %}
+    <li><a href="{% url 'services:index' slug %}"{% if request.path|startswith:slug %} class="active"{% endif %}>{{ slug }}</a></li>
+  {% endfor %}
 </ul>
