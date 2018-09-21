@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Feeds · Woid{% endblock %}
+
+{% block menu %}
+  <h1>feeds</h1>
+{% endblock %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+  {% else %}
+    <p><a href="{% url 'login' %}">log in</a> to add your rss feeds</p>
+  {% endif %}
+
+{% endblock %}

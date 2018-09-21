@@ -1,6 +1,6 @@
 dj-database-url==0.3.0
 Django==1.8.3
-psycopg2==2.6.1
+psycopg2-binary==2.7.5
 python-decouple==2.3
 pytz==2015.4
 Unipath==1.1

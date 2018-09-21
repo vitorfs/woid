@@ -41,6 +41,7 @@ INSTALLED_APPS = (
 
     'woid.apps.accounts',
     'woid.apps.core',
+    'woid.apps.feeds',
     'woid.apps.services',
 )
 

@@ -31,15 +31,14 @@
 <body>
   <div class="wrapper">
     <header>
-      <a href="{% url 'front_page' %}">woid</a>
-      {% comment %}
+      <a href="{% url 'front_page' %}" class="logo">woid</a>
+      <a href="{% url 'front_page' %}">top stories</a>
+      <a href="{% url 'feeds:index' %}">feeds</a>
       {% if user.is_authenticated %}
         <nav><a href="{% url 'front_page' %}">{{ user.username }}</a> / <a href="{% url 'logout' %}">logout</a></nav>
       {% else %}
         <nav><a href="{% url 'signup' %}">sign up</a> / <a href="{% url 'login' %}">login</a></nav>
       {% endif %}
-      {% endcomment %}
-      <nav>&nbsp;</nav>
     </header>
     <main>
     {% for message in messages %}

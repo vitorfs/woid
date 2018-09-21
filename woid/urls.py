@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     url(r'^cookies/', TemplateView.as_view(template_name='core/cookies.html'), name='cookies'),
     url(r'^privacy/', TemplateView.as_view(template_name='core/privacy.html'), name='privacy'),
     url(r'^terms/', TemplateView.as_view(template_name='core/terms.html'), name='terms'),
+    url(r'^feeds/', include('woid.apps.feeds.urls', namespace='feeds')),
     url(r'^(?P<slug>[-_\w]+)/', include('woid.apps.services.urls', namespace='services')),
 )

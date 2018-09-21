@@ -471,10 +471,14 @@ header {
 
 header > a {
   float: left;
-  color: #333;
-  font-weight: 700;
-  text-decoration: none;
   margin-right: 20px;
+  vertical-align: middle;
+}
+
+header > a.logo {
+  font-weight: 700;
+  color: #333;
+  text-decoration: none;
   font-size: 16px;
 }
 
