@@ -11,7 +11,6 @@ class Command(BaseCommand):
     def get_crawler_class(self, slug):
         crawlers_classes = {
             'reddit': crawlers.RedditCrawler,
-            'medium': crawlers.MediumCrawler,
             'hn': crawlers.HackerNewsCrawler,
             'producthunt': crawlers.ProductHuntCrawler,
             'github': crawlers.GithubCrawler,
