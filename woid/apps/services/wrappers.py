@@ -12,15 +12,13 @@ from django.conf import settings
 from django.utils import timezone
 
 
-requests.packages.urllib3.disable_warnings()
 
-
-class AbstractBaseClient(object):
+class AbstractBaseClient:
     def __init__(self):
         self.headers = { 'user-agent': 'woid/1.0' }
 
 
-class HackerNewsClient(object):
+class HackerNewsClient:
     def __init__(self):
         self.firebase_app = firebase.FirebaseApplication('https://hacker-news.firebaseio.com', None)
 
@@ -47,7 +45,7 @@ class RedditClient(AbstractBaseClient):
             r = requests.get('https://www.reddit.com/.json', headers=self.headers)
             result = r.json()
             stories = result['data']['children']
-        except ValueError, e:
+        except ValueError as e:
             logging.error(e)
             logging.error(r)
 
@@ -122,7 +120,7 @@ class NyTimesClient(AbstractBaseClient):
 
 class ProductHuntClient(AbstractBaseClient):
     def __init__(self):
-        super(ProductHuntClient, self).__init__()
+        super().__init__()
         extra_headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

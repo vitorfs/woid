@@ -1,12 +1,13 @@
-# coding: utf-8
+from django.urls import path
 
-from django.conf.urls import patterns, include, url
+from . import views
 
+app_name = 'services'
 
-urlpatterns = patterns('woid.apps.services.views',
-    url(r'^$', 'index', name='index'),
-    url(r'^archive/$', 'archive', name='archive'),
-    url(r'^(?P<year>[0-9]{4})/$', 'year', name='year'),
-    url(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$', 'month', name='month'),
-    url(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$', 'day', name='day'),
-)
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('archive/', views.archive, name='archive'),
+    path('<int:year>/', views.year, name='year'),
+    path('<int:year>/<int:month>/', views.month, name='month'),
+    path('<int:year>/<int:month>/<int:day>/', views.day, name='day'),
+]

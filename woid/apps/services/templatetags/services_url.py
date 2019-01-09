@@ -2,8 +2,7 @@
 
 from django import template
 from django.utils import timezone
-from django.utils.html import escape
-from django.core.urlresolvers import reverse as r
+from django.urls import reverse as r
 
 register = template.Library()
 

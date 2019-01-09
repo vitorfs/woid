@@ -25,7 +25,7 @@ class Service(models.Model):
         verbose_name_plural = 'services'
         ordering = ('name',)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def to_dict(self):
@@ -55,7 +55,7 @@ class Story(models.Model):
         (ERROR, 'Error'),
     )
 
-    service = models.ForeignKey(Service, related_name='stories')
+    service = models.ForeignKey(Service, related_name='stories', on_delete=models.CASCADE)
     code = models.CharField(max_length=255)
     title = models.CharField(max_length=500, null=True, blank=True)
     url = models.URLField(max_length=2000, null=True, blank=True)
@@ -77,15 +77,15 @@ class Story(models.Model):
         unique_together = (('service', 'code', 'date'),)
         ordering = ('-score',)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.code
 
     def build_url(self):
-        self.url = u'{0}{1}'.format(self.service.story_url, self.code)
+        self.url = '{0}{1}'.format(self.service.story_url, self.code)
         return self.url
 
     def get_template(self):
-        template = u'services/includes/{0}_story.html'.format(self.service.slug)
+        template = 'services/includes/{0}_story.html'.format(self.service.slug)
         return template
 
     def to_dict(self):
@@ -100,7 +100,7 @@ class Story(models.Model):
 
 
 class StoryUpdate(models.Model):
-    story = models.ForeignKey(Story, related_name='updates')
+    story = models.ForeignKey(Story, related_name='updates', on_delete=models.CASCADE)
     comments_changes = models.IntegerField(default=0)
     score_changes = models.IntegerField(default=0)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -110,5 +110,5 @@ class StoryUpdate(models.Model):
         verbose_name = 'story update'
         verbose_name_plural = 'stories updates'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.story.code
