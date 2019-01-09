@@ -1,12 +1,9 @@
-# coding: utf-8
-
 import json
 from collections import OrderedDict
 from itertools import groupby
 import datetime
 
 from django.http import HttpResponse
-from django.db.models import Max
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404

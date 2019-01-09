@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-
+import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('score', models.IntegerField(default=0)),
                 ('date', models.DateTimeField(null=True, blank=True)),
                 ('status', models.CharField(default=b'N', max_length=1, choices=[(b'N', b'New'), (b'O', b'Ok'), (b'E', b'Error')])),
-                ('service', models.ForeignKey(related_name='stories', to='services.Service')),
+                ('service', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stories', to='services.Service')),
             ],
             options={
                 'ordering': ('-score',),
@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
                 ('comments_changes', models.IntegerField(default=0)),
                 ('score_changes', models.IntegerField(default=0)),
                 ('updated_at', models.DateTimeField(auto_now_add=True)),
-                ('story', models.ForeignKey(related_name='updates', to='services.Story')),
+                ('story', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='updates', to='services.Story')),
             ],
             options={
                 'db_table': 'services_story_update',

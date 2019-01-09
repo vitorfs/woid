@@ -8,7 +8,7 @@ from woid.apps.services.models import Service, Story, StoryUpdate
 from woid.apps.services import wrappers
 
 
-class AbstractBaseCrawler(object):
+class AbstractBaseCrawler:
     def __init__(self, slug, client):
         self.service = Service.objects.get(slug=slug)
         self.slug = slug
@@ -32,7 +32,7 @@ class AbstractBaseCrawler(object):
 
 class HackerNewsCrawler(AbstractBaseCrawler):
     def __init__(self):
-        super(HackerNewsCrawler, self).__init__('hn', wrappers.HackerNewsClient())
+        super().__init__('hn', wrappers.HackerNewsClient())
 
     def update_top_stories(self):
         try:
@@ -43,7 +43,7 @@ class HackerNewsCrawler(AbstractBaseCrawler):
                 i += 1
                 if i > 100:
                     break
-        except Exception, e:
+        except Exception as e:
             logging.error(e)
 
     def update_story(self, code):
@@ -64,13 +64,13 @@ class HackerNewsCrawler(AbstractBaseCrawler):
                 comments = story_data.get('descendants', 0)
                 has_changes = (score != story.score or comments != story.comments)
 
-                '''
-                if not story.status == Story.NEW and has_changes:
-                    update = StoryUpdate(story=story)
-                    update.comments_changes = comments - story.comments
-                    update.score_changes = score - story.score
-                    update.save()
-                '''
+
+                # if not story.status == Story.NEW and has_changes:
+                #     update = StoryUpdate(story=story)
+                #     update.comments_changes = comments - story.comments
+                #     update.score_changes = score - story.score
+                #     update.save()
+
                 story.comments = comments
                 story.score = score
                 story.title = story_data.get('title', '')
@@ -87,14 +87,14 @@ class HackerNewsCrawler(AbstractBaseCrawler):
 
                 story.status = Story.OK
                 story.save()
-        except Exception, e:
-            logging.error(u'Exception in code {0} HackerNewsCrawler.update_story'.format(code))
+        except Exception as e:
+            logging.error('Exception in code {0} HackerNewsCrawler.update_story'.format(code))
             logging.error(e)
 
 
 class RedditCrawler(AbstractBaseCrawler):
     def __init__(self):
-        super(RedditCrawler, self).__init__('reddit', wrappers.RedditClient())
+        super().__init__('reddit', wrappers.RedditClient())
 
     def update_top_stories(self):
         try:
@@ -110,13 +110,11 @@ class RedditCrawler(AbstractBaseCrawler):
                 comments = story_data.get('num_comments', 0)
                 has_changes = (score != story.score or comments != story.comments)
 
-                '''
-                if not story.status == Story.NEW and has_changes:
-                    update = StoryUpdate(story=story)
-                    update.comments_changes = comments - story.comments
-                    update.score_changes = score - story.score
-                    update.save()
-                '''
+                # if not story.status == Story.NEW and has_changes:
+                #     update = StoryUpdate(story=story)
+                #     update.comments_changes = comments - story.comments
+                #     update.score_changes = score - story.score
+                #     update.save()
 
                 story.comments = comments
                 story.score = score
@@ -125,13 +123,13 @@ class RedditCrawler(AbstractBaseCrawler):
 
                 story.status = Story.OK
                 story.save()
-        except Exception, e:
+        except Exception as e:
             logging.error(e)
 
 
 class GithubCrawler(AbstractBaseCrawler):
     def __init__(self):
-        super(GithubCrawler, self).__init__('github', wrappers.GithubClient())
+        super().__init__('github', wrappers.GithubClient())
 
     def update_top_stories(self):
         try:
@@ -143,22 +141,19 @@ class GithubCrawler(AbstractBaseCrawler):
                     story.build_url()
 
                 stars = data.get('stars', 0)
-                '''
-                    Because of the nature of the github trending repositories
-                    we are only interested on changes where the stars have increased
-                    this way the crawler is gonna campure the highest starts one repository
-                    got in a single day
-                '''
+
+                # Because of the nature of the github trending repositories
+                # we are only interested on changes where the stars have increased
+                # this way the crawler is gonna campure the highest starts one repository
+                # got in a single day
                 has_changes = (stars > story.score)
 
                 if story.status == Story.NEW:
                     story.score = stars
                 elif has_changes:
-                    '''
-                    update = StoryUpdate(story=story)
-                    update.score_changes = stars - story.score
-                    update.save()
-                    '''
+                    # update = StoryUpdate(story=story)
+                    # update.score_changes = stars - story.score
+                    # update.save()
                     story.score = stars
 
                 story.title = data.get('name')[1:]
@@ -167,7 +162,7 @@ class GithubCrawler(AbstractBaseCrawler):
                 language = data.get('language', '')
 
                 if language and description:
-                    description = u'{0} • {1}'.format(language, description)
+                    description = '{0} • {1}'.format(language, description)
                 elif language:
                     description = language
 
@@ -176,53 +171,13 @@ class GithubCrawler(AbstractBaseCrawler):
                 story.status = Story.OK
                 story.save()
 
-        except Exception, e:
-            logging.error(e)
-
-
-class MediumCrawler(AbstractBaseCrawler):
-    def __init__(self):
-        super(MediumCrawler, self).__init__('medium', wrappers.MediumClient())
-
-    def update_top_stories(self):
-        try:
-            posts = self.client.get_top_stories()
-            today = timezone.now()
-            for post_data in posts:
-                story, created = Story.objects.get_or_create(service=self.service, code=post_data['id'], date=timezone.datetime(today.year, today.month, today.day, tzinfo=timezone.get_current_timezone()))
-
-                if created:
-                    story.url = u'{0}/@{1}/{2}'.format(self.service.story_url, post_data['creator']['username'], post_data['id'])
-                    story.start_score = int(post_data['virtuals']['recommends'])
-                    story.start_comments = int(post_data['virtuals']['responsesCreatedCount'])
-
-                story.title = post_data['title']
-
-                recommends = int(post_data['virtuals']['recommends']) - story.start_score
-                comments = int(post_data['virtuals']['responsesCreatedCount']) - story.start_comments
-                has_changes = (recommends != story.score or comments != story.comments)
-
-                '''
-                if not story.status == Story.NEW and has_changes:
-                    update = StoryUpdate(story=story)
-                    update.comments_changes = comments - story.comments
-                    update.score_changes = recommends - story.score
-                    update.save()
-                '''
-
-                story.score = recommends
-                story.comments = comments
-
-                story.status = Story.OK
-                story.save()
-
-        except Exception, e:
+        except Exception as e:
             logging.error(e)
 
 
 class NyTimesCrawler(AbstractBaseCrawler):
     def __init__(self):
-        super(NyTimesCrawler, self).__init__('nytimes', wrappers.NyTimesClient())
+        super().__init__('nytimes', wrappers.NyTimesClient())
 
     def save_story(self, story_data, score, weight):
         story_id = story_data.get('id', story_data.get('asset_id', None))
@@ -277,13 +232,13 @@ class NyTimesCrawler(AbstractBaseCrawler):
                 self.save_story(story_data, score, 1)
                 score -= 1
 
-        except Exception, e:
+        except Exception as e:
             logging.error(e)
 
 
 class ProductHuntCrawler(AbstractBaseCrawler):
     def __init__(self):
-        super(ProductHuntCrawler, self).__init__('producthunt', wrappers.ProductHuntClient())
+        super().__init__('producthunt', wrappers.ProductHuntClient())
 
     def update_top_stories(self):
         try:
@@ -307,5 +262,5 @@ class ProductHuntCrawler(AbstractBaseCrawler):
                 story.status = Story.OK
                 story.save()
 
-        except Exception, e:
+        except Exception as e:
             logging.error(e)

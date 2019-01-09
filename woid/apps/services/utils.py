@@ -1,5 +1,3 @@
-# coding: utf-8
-
 def remove_duplicates(seq):
     seen = set()
     seen_add = seen.add

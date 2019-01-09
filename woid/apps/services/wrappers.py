@@ -6,35 +6,36 @@ import re
 
 from bs4 import BeautifulSoup
 import requests
-from firebase import firebase
 
 from django.conf import settings
 from django.utils import timezone
 
 
-requests.packages.urllib3.disable_warnings()
 
-
-class AbstractBaseClient(object):
+class AbstractBaseClient:
     def __init__(self):
         self.headers = { 'user-agent': 'woid/1.0' }
 
 
-class HackerNewsClient(object):
-    def __init__(self):
-        self.firebase_app = firebase.FirebaseApplication('https://hacker-news.firebaseio.com', None)
+class HackerNewsClient(AbstractBaseClient):
+    base_url = 'https://hacker-news.firebaseio.com'
+
+    def request(self, endpoint):
+        r = requests.get(endpoint, headers=self.headers)
+        result = r.json()
+        return result
 
     def get_top_stories(self):
-        result = self.firebase_app.get('/v0/topstories', None)
-        return result
+        endpoint = '%s/v0/topstories.json' % self.base_url
+        return self.request(endpoint)
 
     def get_story(self, code):
-        result = self.firebase_app.get('/v0/item/{0}'.format(code), None)
-        return result
+        endpoint = '%s/v0/item/%s.json' % (self.base_url, code)
+        return self.request(endpoint)
 
     def get_max_item(self):
-        result = self.firebase_app.get('/v0/maxitem', None)
-        return result
+        endpoint = '%s/v0/maxitem.json' % self.base_url
+        return self.request(endpoint)
 
 
 class RedditClient(AbstractBaseClient):
@@ -47,7 +48,7 @@ class RedditClient(AbstractBaseClient):
             r = requests.get('https://www.reddit.com/.json', headers=self.headers)
             result = r.json()
             stories = result['data']['children']
-        except ValueError, e:
+        except ValueError as e:
             logging.error(e)
             logging.error(r)
 
@@ -88,15 +89,6 @@ class GithubClient(AbstractBaseClient):
         return data
 
 
-class MediumClient(AbstractBaseClient):
-
-    def get_top_stories(self):
-        r = requests.get('https://medium.com/top-stories?format=json', headers=self.headers)
-        text_data = r.text[16:] # remove ])}while(1);</x>
-        json_data = json.loads(text_data)
-        return json_data['payload']['value']['posts']
-
-
 class NyTimesClient(AbstractBaseClient):
 
     def get_most_popular_stories(self):
@@ -122,7 +114,7 @@ class NyTimesClient(AbstractBaseClient):
 
 class ProductHuntClient(AbstractBaseClient):
     def __init__(self):
-        super(ProductHuntClient, self).__init__()
+        super().__init__()
         extra_headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

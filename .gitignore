@@ -60,3 +60,4 @@ target/
 .DS_Store
 .env
 *.sqlite3
+.idea
