@@ -1,5 +1,7 @@
 import json
 from collections import OrderedDict
+
+from django.views.decorators.cache import cache_page
 from itertools import groupby
 import datetime
 
@@ -43,6 +45,8 @@ def stories(request, service, queryset, subtitle):
             'start': start
         })
 
+
+@cache_page(60)
 def front_page(request):
     today = timezone.now()
     stories = list()
@@ -63,21 +67,29 @@ def front_page(request):
     else:
         return render(request, 'services/front_page.html', { 'stories': stories, 'subtitle': subtitle })
 
+
+@cache_page(60)
 def index(request, slug):
     today = timezone.now()
     return day(request, slug, today.year, today.month, today.day)
 
+
+@cache_page(5 * 60)
 def year(request, slug, year):
     service = get_object_or_404(Service, slug=slug)
     queryset = service.stories.filter(status=Story.OK, date__year=year)
     return stories(request, service, queryset, year)
 
+
+@cache_page(5 * 60)
 def month(request, slug, year, month):
     service = get_object_or_404(Service, slug=slug)
     queryset = service.stories.filter(status=Story.OK, date__year=year, date__month=month)
     subtitle = timezone.datetime(int(year), int(month), 1).strftime('%b %Y')
     return stories(request, service, queryset, subtitle)
 
+
+@cache_page(5 * 60)
 def day(request, slug, year, month, day):
     date = datetime.datetime(int(year), int(month), int(day))
     service = get_object_or_404(Service, slug=slug)
@@ -85,6 +97,8 @@ def day(request, slug, year, month, day):
     subtitle = timezone.datetime(int(year), int(month), int(day)).strftime('%d %b %Y')
     return stories(request, service, queryset, subtitle)
 
+
+@cache_page(24 * 60)
 def archive(request, slug):
     service = get_object_or_404(Service, slug=slug)
 

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import include, path
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
@@ -22,3 +23,16 @@ urlpatterns = [
     path('terms/', TemplateView.as_view(template_name='core/terms.html'), name='terms'),
     path('<slug:slug>/', include('woid.apps.services.urls', namespace='services')),
 ]
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    try:
+        import debug_toolbar
+        urlpatterns = [
+            path('__debug__/', include(debug_toolbar.urls)),
+        ] + urlpatterns
+    except ImportError:
+        pass
