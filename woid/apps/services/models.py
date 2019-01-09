@@ -8,13 +8,13 @@ class Service(models.Model):
     ERROR = 'E'
     CRAWLING = 'C'
     CURRENT_STATUS = (
-        (GOOD, u'✓ good'),
-        (ERROR, u'× error'),
-        (CRAWLING, u'~ running')
+        (GOOD, '✓ good'),
+        (ERROR, '× error'),
+        (CRAWLING, '~ running')
         )
 
     name = models.CharField(max_length=255)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=30, unique=True)
     url = models.URLField()
     story_url = models.URLField()
     last_run = models.DateTimeField(null=True, blank=True)

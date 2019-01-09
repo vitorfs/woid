@@ -1,6 +1,7 @@
 import time
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 from woid.apps.services import crawlers
 
@@ -24,6 +25,20 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         service_slugs = kwargs['service_slug']
         for slug in service_slugs:
+            if slug == 'nytimes' and not settings.NYTIMES_API_KEY:
+                self.stdout.write(self.style.ERROR(
+                    'The nytimes crawler is missing API Key. '
+                    'Read more: https://github.com/vitorfs/woid#the-new-york-times'
+                ))
+                continue
+
+            if slug == 'producthunt' and not settings.PRODUCT_HUNT_TOKEN:
+                self.stdout.write(self.style.ERROR(
+                    'The producthunt crawler is missing API Key. '
+                    'Read more: https://github.com/vitorfs/woid#product-hunt'
+                ))
+                continue
+
             crawler_class = self.get_crawler_class(slug)
             if crawler_class is not None:
                 crawler = crawler_class()

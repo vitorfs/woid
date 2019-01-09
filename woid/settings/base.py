@@ -161,8 +161,7 @@ LOGIN_REDIRECT_URL = 'front_page'
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(os.path.dirname(BASE_DIR), 'cache'),
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
 
@@ -171,6 +170,6 @@ CACHES = {
 # THIRD-PARTY APPS SETTINGS
 # ==============================================================================
 
-NYTIMES_API_KEY = config('NYTIMES_API_KEY')
+NYTIMES_API_KEY = config('NYTIMES_API_KEY', default='')
 
-PRODUCT_HUNT_TOKEN = config('PRODUCT_HUNT_TOKEN')
+PRODUCT_HUNT_TOKEN = config('PRODUCT_HUNT_TOKEN', default='')

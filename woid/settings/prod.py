@@ -62,13 +62,24 @@ LOGGING = {
         },
         'woid': {
             'handlers': ['console', 'sentry'],
-            'level': 'INFO',
+            'level': 'WARNING',
             'propagate': False,
         },
         'django.security.DisallowedHost': {
             'handlers': ['null'],
             'propagate': False,
         },
+    }
+}
+
+# ==============================================================================
+# CACHE SETTINGS
+# ==============================================================================
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(os.path.dirname(BASE_DIR), 'cache'),
     }
 }
 

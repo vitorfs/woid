@@ -1,7 +1,6 @@
 [
   {
     "model": "services.Service",
-    "pk": 1,
     "fields": {
       "name": "Hacker News",
       "slug": "hn",
@@ -11,7 +10,6 @@
   },
   {
     "model": "services.Service",
-    "pk": 2,
     "fields": {
       "name": "Reddit",
       "slug": "reddit",
@@ -21,7 +19,6 @@
   },
   {
     "model": "services.Service",
-    "pk": 3,
     "fields": {
       "name": "GitHub",
       "slug": "github",
@@ -31,17 +28,6 @@
   },
   {
     "model": "services.Service",
-    "pk": 4,
-    "fields": {
-      "name": "Medium",
-      "slug": "medium",
-      "url": "https://medium.com/top-stories",
-      "story_url": "https://medium.com"
-    }
-  },
-  {
-    "model": "services.Service",
-    "pk": 5,
     "fields": {
       "name": "New York Times",
       "slug": "nytimes",
@@ -51,7 +37,6 @@
   },
   {
     "model": "services.Service",
-    "pk": 6,
     "fields": {
       "name": "Product Hunt",
       "slug": "producthunt",
