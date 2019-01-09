@@ -4,6 +4,7 @@ import calendar
 
 from django import template
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -43,7 +44,7 @@ def month_calendar(year, month, days, service):
                 html += '<td>{0}</td>'.format(str_day)
         html += '</tr>'
     html += '</tbody></table>'
-    return html
+    return mark_safe(html)
 
 @register.filter('month_name')
 def month_name(month):

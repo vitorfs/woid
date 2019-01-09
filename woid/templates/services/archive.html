@@ -2,7 +2,7 @@
 
 {% block title %}{{ service.name|title }}'s Archive · Woid{% endblock %}
 
-{% load staticfiles calendar_helpers %}
+{% load static calendar_helpers %}
 
 {% block javascript %}
   <script src="{% static 'js/services/stories.js' %}"></script>
@@ -12,11 +12,11 @@
   <h2>{{ service.name }} <small>(archive)</small></h2>
   {% include 'services/includes/menu.html' %}
   
-  {% for year, months in archive.iteritems %}
+  {% for year, months in archive.items %}
     <div class="calendar cf">
       <h3><a href="{% url 'services:year' service.slug year %}">{{ year }}</a></h3>
       <div class="months cf">
-        {% for month, days in months.iteritems %}
+        {% for month, days in months.items %}
           <div class="month">
             {% month_calendar year month days service %}
           </div>

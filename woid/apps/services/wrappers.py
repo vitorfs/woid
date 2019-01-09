@@ -6,7 +6,6 @@ import re
 
 from bs4 import BeautifulSoup
 import requests
-from firebase import firebase
 
 from django.conf import settings
 from django.utils import timezone
@@ -18,21 +17,25 @@ class AbstractBaseClient:
         self.headers = { 'user-agent': 'woid/1.0' }
 
 
-class HackerNewsClient:
-    def __init__(self):
-        self.firebase_app = firebase.FirebaseApplication('https://hacker-news.firebaseio.com', None)
+class HackerNewsClient(AbstractBaseClient):
+    base_url = 'https://hacker-news.firebaseio.com'
+
+    def request(self, endpoint):
+        r = requests.get(endpoint, headers=self.headers)
+        result = r.json()
+        return result
 
     def get_top_stories(self):
-        result = self.firebase_app.get('/v0/topstories', None)
-        return result
+        endpoint = '%s/v0/topstories.json' % self.base_url
+        return self.request(endpoint)
 
     def get_story(self, code):
-        result = self.firebase_app.get('/v0/item/{0}'.format(code), None)
-        return result
+        endpoint = '%s/v0/item/%s.json' % (self.base_url, code)
+        return self.request(endpoint)
 
     def get_max_item(self):
-        result = self.firebase_app.get('/v0/maxitem', None)
-        return result
+        endpoint = '%s/v0/maxitem.json' % self.base_url
+        return self.request(endpoint)
 
 
 class RedditClient(AbstractBaseClient):
