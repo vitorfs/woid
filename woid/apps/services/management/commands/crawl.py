@@ -18,7 +18,6 @@ class Command(BaseCommand):
         }
         return crawlers_classes.get(slug)
 
-
     def add_arguments(self, parser):
         parser.add_argument('service_slug', nargs='+', type=str, help='Service Slug')
 

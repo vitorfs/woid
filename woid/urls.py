@@ -1,13 +1,12 @@
 from django.conf import settings
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import UserCreationForm
 from django.urls import include, path
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
-from django.contrib.auth import views as auth_views
-from django.contrib.auth.forms import UserCreationForm
 
 from woid.apps.core import views as core_views
 from woid.apps.services import views as services_views
-
 
 urlpatterns = [
     path('', services_views.front_page, name='front_page'),

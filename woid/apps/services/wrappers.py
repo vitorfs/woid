@@ -1,20 +1,18 @@
 # coding: utf-8
 
 import logging
-import json
 import re
-
-from bs4 import BeautifulSoup
-import requests
 
 from django.conf import settings
 from django.utils import timezone
 
+import requests
+from bs4 import BeautifulSoup
 
 
 class AbstractBaseClient:
     def __init__(self):
-        self.headers = { 'user-agent': 'woid/1.0' }
+        self.headers = {'user-agent': 'woid/1.0'}
 
 
 class HackerNewsClient(AbstractBaseClient):
@@ -91,20 +89,31 @@ class GithubClient(AbstractBaseClient):
 
 class NyTimesClient(AbstractBaseClient):
 
+    base_url = 'http://api.nytimes.com/svc/mostpopular/v2/'
+
     def get_most_popular_stories(self):
         data = dict()
 
-        mostviewed_endpoint = 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?api-key={0}'.format(settings.NYTIMES_API_KEY)
+        mostviewed_endpoint = '{0}mostviewed/all-sections/1.json?api-key={1}'.format(
+            self.base_url,
+            settings.NYTIMES_API_KEY
+        )
         r = requests.get(mostviewed_endpoint, headers=self.headers)
         json_data = r.json()
         data['mostviewed'] = json_data['results']
 
-        mostemailed_endpoint = 'http://api.nytimes.com/svc/mostpopular/v2/mostemailed/all-sections/1.json?api-key={0}'.format(settings.NYTIMES_API_KEY)
+        mostemailed_endpoint = '{0}mostemailed/all-sections/1.json?api-key={1}'.format(
+            self.base_url,
+            settings.NYTIMES_API_KEY
+        )
         r = requests.get(mostemailed_endpoint, headers=self.headers)
         json_data = r.json()
         data['mostemailed'] = json_data['results']
 
-        mostshared_endpoint = 'http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key={0}'.format(settings.NYTIMES_API_KEY)
+        mostshared_endpoint = '{0}mostshared/all-sections/1.json?api-key={1}'.format(
+            self.base_url,
+            settings.NYTIMES_API_KEY
+        )
         r = requests.get(mostshared_endpoint, headers=self.headers)
         json_data = r.json()
         data['mostshared'] = json_data['results']

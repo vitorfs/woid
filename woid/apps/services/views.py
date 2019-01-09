@@ -1,14 +1,13 @@
+import datetime
 import json
 from collections import OrderedDict
-
-from django.views.decorators.cache import cache_page
 from itertools import groupby
-import datetime
 
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
-from django.shortcuts import render, get_object_or_404
+from django.views.decorators.cache import cache_page
 
 from woid.apps.services.models import Service, Story
 from woid.apps.services.utils import remove_duplicates
@@ -65,7 +64,7 @@ def front_page(request):
         })
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'services/front_page.html', { 'stories': stories, 'subtitle': subtitle })
+        return render(request, 'services/front_page.html', {'stories': stories, 'subtitle': subtitle})
 
 
 @cache_page(60)
@@ -98,7 +97,7 @@ def day(request, slug, year, month, day):
     return stories(request, service, queryset, subtitle)
 
 
-@cache_page(24 * 60)
+@cache_page(60 * 60)
 def archive(request, slug):
     service = get_object_or_404(Service, slug=slug)
 

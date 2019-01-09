@@ -4,8 +4,8 @@ import logging
 
 from django.utils import timezone
 
-from woid.apps.services.models import Service, Story, StoryUpdate
 from woid.apps.services import wrappers
+from woid.apps.services.models import Service, Story, StoryUpdate
 
 
 class AbstractBaseCrawler:
@@ -22,13 +22,14 @@ class AbstractBaseCrawler:
             self.update_top_stories()
             self.service.status = Service.GOOD
             self.service.save()
-        except:
+        except Exception:
             try:
                 service = Service.objects.get(slug=self.slug)
                 service.status = Service.ERROR
                 service.save()
-            except:
+            except Service.DoesNotExist:
                 pass
+
 
 class HackerNewsCrawler(AbstractBaseCrawler):
     def __init__(self):
@@ -57,13 +58,16 @@ class HackerNewsCrawler(AbstractBaseCrawler):
                     return
 
                 if story.status == Story.NEW:
-                    story.date = timezone.datetime.fromtimestamp(story_data.get('time'), timezone.get_current_timezone())
+                    story.date = timezone.datetime.fromtimestamp(
+                        story_data.get('time'),
+                        timezone.get_current_timezone()
+                    )
                     story.url = u'{0}{1}'.format(story.service.story_url, story.code)
 
                 score = story_data.get('score', 0)
                 comments = story_data.get('descendants', 0)
-                has_changes = (score != story.score or comments != story.comments)
 
+                # has_changes = (score != story.score or comments != story.comments)
 
                 # if not story.status == Story.NEW and has_changes:
                 #     update = StoryUpdate(story=story)
@@ -103,12 +107,16 @@ class RedditCrawler(AbstractBaseCrawler):
                 story_data = data['data']
                 story, created = Story.objects.get_or_create(service=self.service, code=story_data.get('permalink'))
                 if created:
-                    story.date = timezone.datetime.fromtimestamp(story_data.get('created_utc'), timezone.get_current_timezone())
+                    story.date = timezone.datetime.fromtimestamp(
+                        story_data.get('created_utc'),
+                        timezone.get_current_timezone()
+                    )
                     story.build_url()
 
                 score = story_data.get('score', 0)
                 comments = story_data.get('num_comments', 0)
-                has_changes = (score != story.score or comments != story.comments)
+
+                # has_changes = (score != story.score or comments != story.comments)
 
                 # if not story.status == Story.NEW and has_changes:
                 #     update = StoryUpdate(story=story)
@@ -136,7 +144,11 @@ class GithubCrawler(AbstractBaseCrawler):
             repos = self.client.get_today_trending_repositories()
             today = timezone.now()
             for data in repos:
-                story, created = Story.objects.get_or_create(service=self.service, code=data.get('name'), date=timezone.datetime(today.year, today.month, today.day, tzinfo=timezone.get_current_timezone()))
+                story, created = Story.objects.get_or_create(
+                    service=self.service,
+                    code=data.get('name'),
+                    date=timezone.datetime(today.year, today.month, today.day, tzinfo=timezone.get_current_timezone())
+                )
                 if created:
                     story.build_url()
 
@@ -215,7 +227,6 @@ class NyTimesCrawler(AbstractBaseCrawler):
     def update_top_stories(self):
         try:
             popular_stories = self.client.get_most_popular_stories()
-            today = timezone.now()
 
             score = 20
             for story_data in popular_stories['mostviewed']:

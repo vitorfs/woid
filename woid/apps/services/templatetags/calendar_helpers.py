@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+
 def get_calendar(year, month):
     blank_week = [0, 0, 0, 0, 0, 0, 0]
     calendar.setfirstweekday(calendar.SUNDAY)
@@ -16,13 +17,14 @@ def get_calendar(year, month):
         c.append(blank_week)
     if len(c) == 5:
         c.append(blank_week)
-    return c    
+    return c
+
 
 @register.simple_tag
 def month_calendar(year, month, days, service):
     calendar.setfirstweekday(calendar.SUNDAY)
     month_calendar = calendar.monthcalendar(int(year), int(month))
-    
+
     month_name = calendar.month_name[int(month)]
     month_href = reverse('services:month', args=(service.slug, year, month))
 
@@ -45,6 +47,7 @@ def month_calendar(year, month, days, service):
         html += '</tr>'
     html += '</tbody></table>'
     return mark_safe(html)
+
 
 @register.filter('month_name')
 def month_name(month):

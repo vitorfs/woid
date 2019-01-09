@@ -3,8 +3,8 @@
 from django import template
 from django.utils.html import escape
 
-
 register = template.Library()
+
 
 @register.filter('github_title')
 def github_title(title):
