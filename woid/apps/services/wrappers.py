@@ -89,15 +89,6 @@ class GithubClient(AbstractBaseClient):
         return data
 
 
-class MediumClient(AbstractBaseClient):
-
-    def get_top_stories(self):
-        r = requests.get('https://medium.com/top-stories?format=json', headers=self.headers)
-        text_data = r.text[16:] # remove ])}while(1);</x>
-        json_data = json.loads(text_data)
-        return json_data['payload']['value']['posts']
-
-
 class NyTimesClient(AbstractBaseClient):
 
     def get_most_popular_stories(self):
