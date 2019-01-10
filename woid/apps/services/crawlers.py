@@ -7,6 +7,8 @@ from django.utils import timezone
 from woid.apps.services import wrappers
 from woid.apps.services.models import Service, Story, StoryUpdate
 
+logger = logging.getLogger(__name__)
+
 
 class AbstractBaseCrawler:
     def __init__(self, slug, client):
@@ -23,12 +25,8 @@ class AbstractBaseCrawler:
             self.service.status = Service.GOOD
             self.service.save()
         except Exception:
-            try:
-                service = Service.objects.get(slug=self.slug)
-                service.status = Service.ERROR
-                service.save()
-            except Service.DoesNotExist:
-                pass
+            self.service.status = Service.ERROR
+            self.service.save()
 
 
 class HackerNewsCrawler(AbstractBaseCrawler):
@@ -44,8 +42,9 @@ class HackerNewsCrawler(AbstractBaseCrawler):
                 i += 1
                 if i > 100:
                     break
-        except Exception as e:
-            logging.error(e)
+        except Exception:
+            logger.exception('An error occurred while executing `update_top_stores` for Hacker News.')
+            raise
 
     def update_story(self, code):
         try:
@@ -91,9 +90,8 @@ class HackerNewsCrawler(AbstractBaseCrawler):
 
                 story.status = Story.OK
                 story.save()
-        except Exception as e:
-            logging.error('Exception in code {0} HackerNewsCrawler.update_story'.format(code))
-            logging.error(e)
+        except Exception:
+            logger.exception('Exception in code {0} HackerNewsCrawler.update_story'.format(code))
 
 
 class RedditCrawler(AbstractBaseCrawler):
@@ -131,8 +129,9 @@ class RedditCrawler(AbstractBaseCrawler):
 
                 story.status = Story.OK
                 story.save()
-        except Exception as e:
-            logging.error(e)
+        except Exception:
+            logger.exception('An error occurred while executing `update_top_stores` for Reddit.')
+            raise
 
 
 class GithubCrawler(AbstractBaseCrawler):
@@ -183,13 +182,14 @@ class GithubCrawler(AbstractBaseCrawler):
                 story.status = Story.OK
                 story.save()
 
-        except Exception as e:
-            logging.error(e)
+        except Exception:
+            logger.exception('An error occurred while executing `update_top_stores` for GitHub.')
+            raise
 
 
-class NyTimesCrawler(AbstractBaseCrawler):
+class NYTimesCrawler(AbstractBaseCrawler):
     def __init__(self):
-        super().__init__('nytimes', wrappers.NyTimesClient())
+        super().__init__('nytimes', wrappers.NYTimesClient())
 
     def save_story(self, story_data, score, weight):
         story_id = story_data.get('id', story_data.get('asset_id', None))
@@ -243,8 +243,9 @@ class NyTimesCrawler(AbstractBaseCrawler):
                 self.save_story(story_data, score, 1)
                 score -= 1
 
-        except Exception as e:
-            logging.error(e)
+        except Exception:
+            logger.exception('An error occurred while executing `update_top_stores` for NYTimes.')
+            raise
 
 
 class ProductHuntCrawler(AbstractBaseCrawler):
@@ -273,5 +274,6 @@ class ProductHuntCrawler(AbstractBaseCrawler):
                 story.status = Story.OK
                 story.save()
 
-        except Exception as e:
-            logging.error(e)
+        except Exception:
+            logger.exception('An error occurred while executing `update_top_stores` for Product Hunt.')
+            raise

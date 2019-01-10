@@ -4,6 +4,7 @@ from collections import OrderedDict
 from itertools import groupby
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Sum, Min
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
@@ -76,14 +77,22 @@ def index(request, slug):
 @cache_page(5 * 60)
 def year(request, slug, year):
     service = get_object_or_404(Service, slug=slug)
-    queryset = service.stories.filter(status=Story.OK, date__year=year)
+    queryset = service.stories \
+        .filter(status=Story.OK, date__year=year) \
+        .values('url', 'title') \
+        .annotate(score=Sum('score'), date=Min('date')) \
+        .order_by('-score')
     return stories(request, service, queryset, year)
 
 
 @cache_page(5 * 60)
 def month(request, slug, year, month):
     service = get_object_or_404(Service, slug=slug)
-    queryset = service.stories.filter(status=Story.OK, date__year=year, date__month=month)
+    queryset = service.stories \
+        .filter(status=Story.OK, date__year=year, date__month=month) \
+        .values('url', 'title') \
+        .annotate(score=Sum('score'), date=Min('date')) \
+        .order_by('-score')
     subtitle = timezone.datetime(int(year), int(month), 1).strftime('%b %Y')
     return stories(request, service, queryset, subtitle)
 

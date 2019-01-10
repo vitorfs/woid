@@ -35,6 +35,10 @@ class Service(models.Model):
             'url': self.url
         }
 
+    def get_story_template(self):
+        template = 'services/includes/{0}_story.html'.format(self.slug)
+        return template
+
 
 class Story(models.Model):
     TEXT = 'T'
@@ -85,8 +89,7 @@ class Story(models.Model):
         return self.url
 
     def get_template(self):
-        template = 'services/includes/{0}_story.html'.format(self.service.slug)
-        return template
+        return self.service.get_story_template()
 
     def to_dict(self):
         return {

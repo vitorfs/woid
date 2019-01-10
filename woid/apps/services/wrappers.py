@@ -9,6 +9,8 @@ from django.utils import timezone
 import requests
 from bs4 import BeautifulSoup
 
+logger = logging.getLogger(__name__)
+
 
 class AbstractBaseClient:
     def __init__(self):
@@ -39,16 +41,14 @@ class HackerNewsClient(AbstractBaseClient):
 class RedditClient(AbstractBaseClient):
 
     def get_front_page_stories(self):
-        r = None
         stories = list()
 
         try:
             r = requests.get('https://www.reddit.com/.json', headers=self.headers)
             result = r.json()
             stories = result['data']['children']
-        except ValueError as e:
-            logging.error(e)
-            logging.error(r)
+        except ValueError:
+            logger.exception('An error occurred while executing RedditClient.get_front_page_stories')
 
         return stories
 
@@ -87,7 +87,7 @@ class GithubClient(AbstractBaseClient):
         return data
 
 
-class NyTimesClient(AbstractBaseClient):
+class NYTimesClient(AbstractBaseClient):
 
     base_url = 'http://api.nytimes.com/svc/mostpopular/v2/'
 

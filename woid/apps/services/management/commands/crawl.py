@@ -1,7 +1,7 @@
 import time
 
-from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.core.management.base import BaseCommand
 
 from woid.apps.services import crawlers
 
@@ -15,7 +15,7 @@ class Command(BaseCommand):
             'hn': crawlers.HackerNewsCrawler,
             'producthunt': crawlers.ProductHuntCrawler,
             'github': crawlers.GithubCrawler,
-            'nytimes': crawlers.NyTimesCrawler,
+            'nytimes': crawlers.NYTimesCrawler,
         }
         return crawlers_classes.get(slug)
 

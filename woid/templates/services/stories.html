@@ -13,7 +13,7 @@
   {% include 'services/includes/menu.html' %}
   <ol class="stories" start="{{ start }}">
     {% for story in stories %}
-      {% include story.get_template %}
+      {% include service.get_story_template %}
     {% endfor %}
   </ol>
 
