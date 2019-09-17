@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-
+    'django.contrib.admin' ,
     'woid.apps.accounts',
     'woid.apps.core',
     'woid.apps.services',
