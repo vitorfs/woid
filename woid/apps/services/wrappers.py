@@ -59,26 +59,25 @@ class GithubClient(AbstractBaseClient):
         r = requests.get('https://github.com/trending?since=daily', headers=self.headers)
         html = r.text
         soup = BeautifulSoup(html, 'html.parser')
-        repos = soup.select('ol.repo-list li')
+        articles = soup.find_all('article',class_='Box-row')
         data = list()
-        for repo in repos:
+        for article in articles:
             repo_data = dict()
-            repo_data['name'] = repo.h3.a.get('href')
+            repo_data['name'] = article.h1.a.get('href')
 
-            description = repo.p.text
+            description = article.p
             if description:
-                description = description.strip()
+                description = description.get_text().strip()
             else:
                 description = ''
             repo_data['description'] = description
-
-            lang = repo.find(attrs={'itemprop': 'programmingLanguage'})
+            lang = article.find(attrs={'itemprop': 'programmingLanguage'})
             if lang:
-                repo_data['language'] = lang.text.strip()
+                repo_data['language'] = lang.text
             else:
                 repo_data['language'] = ''
 
-            stars_text = repo.findAll(text=re.compile('stars today'))
+            stars_text = article.findAll(text=re.compile('stars today'))
             stars_numbers_only = re.findall(r'\d+', stars_text[0])
             repo_data['stars'] = int(stars_numbers_only[0])
 
